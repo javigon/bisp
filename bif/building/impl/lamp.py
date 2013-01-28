@@ -27,8 +27,8 @@ class Lamp(service.Service):
         r = dict()
         r['ID'] = self.getLogicalID()
         r['wattage'] = self.getWattage()
-        r['input'] = [['wattage','Electric power of a lamp measured in Watts'],['efficiency','Performance of a lamp'], ['luminosity','Maximum amount of luminosity that a lamp can produce'],['gain', 'Scale (0-1) in which a lamp operates']]
-        r['output'] = [['production', 'Amount of luminosity produced by a lamp'],['state', 'On/Off'],['gain', 'Scale (0-1) in which a lamp operates']]
+        r['input'] =  {'wattage': 'Electric power of a lamp measured in Watts','efficiency': 'Performance of a lamp', 'luminosity': 'Maximum amount of luminosity that a lamp can produce','gain': 'Scale (0-1) in which a lamp operates'}
+        r['output'] = {'production': 'Amount of luminosity produced by a lamp', 'state': 'On/Off','gain': 'Scale (0-1) in which a lamp operates'}
         return r
 
     def getLogicalID(self):

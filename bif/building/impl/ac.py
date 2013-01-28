@@ -22,8 +22,8 @@ class AC(service.Service):
         r = dict()
         r['ID'] = self.getLogicalID()
         r['wattage'] = self.getWattage()
-        r['input'] = [['wattage','Electric power of an ac measured in Watts'],['efficiency','Performance of an ac'], ['gain', 'Scale (0-1) in which an ac operates']]
-        r['output'] = [['production', 'Amount of heating produced by an ac'],['state', 'On/Off'],['gain', 'Scale (0-1) in which an ac operates']]
+        r['input'] = {'wattage': 'Electric power of an ac measured in Watts', 'efficiency': 'Performance of an ac', 'gain':'Scale (0-1) in which an ac operates'}
+        r['output'] = {'production': 'Amount of heating produced by an ac','state': 'On/Off','gain': 'Scale (0-1) in which an ac operates'}
         return r
 
     def getLogicalID(self):

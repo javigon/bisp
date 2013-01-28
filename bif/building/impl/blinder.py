@@ -45,8 +45,8 @@ class Blind(service.Service):
         r['ID'] = self.getLogicalID()
         r['size'] = self.getSize()
         r['speed'] = self.getSpeed()
-        r['input'] = [['setpoint','Requested state of the blind. Scale [0,1]'], ['size','Window/Blinder size'], ['speed','Speed at which the window can go up and down']]
-        r['output'] = [['state', 'Continuous value between Up and Down. Scale [0,1]'],['setpoint', 'Requested state of the blind. Scale [0,1]']]
+        r['input'] = {'setpoint': 'Requested state of the blind. Scale [0,1]', 'size': 'Window/Blinder size', 'speed': 'Speed at which the window can go up and down'}
+        r['output'] = {'state': 'Continuous value between Up and Down. Scale [0,1]','setpoint': 'Requested state of the blind. Scale [0,1]'}
         return r
 
     def getLogicalID(self):

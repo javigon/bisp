@@ -30,8 +30,8 @@ class WaterAP(service.Service):
         r = dict()
         r['ID'] = self.getLogicalID()
         r['flow'] = self.getFlow()
-        r['input'] = [['flow','Maximum amount of water per unit of time'],['efficiency','Performance of a water access point'], ['gain', 'Scale (0-1) in which a water access point operates']]
-        r['output'] = [['production', 'Amount of water liberated by a water access point'],['state', 'On/Off'],['gain', 'Scale (0-1) in which a water access point operates']]
+        r['input'] = {'flow': 'Maximum amount of water per unit of time','efficiency': 'Performance of a water access point', 'gain': 'Scale (0-1) in which a water access point operates'}
+        r['output'] = {'production': 'Amount of water liberated by a water access point','state': 'On/Off','gain': 'Scale (0-1) in which a water access point operates'}
         return r
 
     def getLogicalID(self):
