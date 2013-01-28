@@ -404,6 +404,19 @@ The big question when writing a building simulator is what should be simulated a
 
 One of the lessons learned was that the simulator should use -- and respect -- real metrics. This means that the unit of water consumption is L, the flow of energy is J/s and so on. It also means that the calculations should be correct. This makes it easier to verify correctness.
 
+\subsection{Repeatability}
+
+% motivation
+A key use case for simulators is to enable users to compare multiple implementations. In a simulator we have the opportunity to make sure that two runs generate the exact same conditions for the client software. This is among other things used for verifying that adding a feature has no negative side-effects.
+
+% how
+There are two things that can break this. The first is if the simulator relies on some live data, like meteorological data from weather stations. We are not doing this. The second is models relying on random generators. We have a few of these. By allowing the users to seed the generator with a known value we can ensure a fixed sequence of random numbers and that will provide repeatability.
+
+\subsection{Testability}
+
+% HAL testing
+Buildings interacts with their environment and that environment has a yearly cycle. Testing the control logic thus requires a full year of simulation time. This needs to be doable within a reasonable amount of time. In order to reach this goal it might be necessary to lower the granularity of simulation.
+
 \subsection{Building Representation}
 
 A physical representation of the building is needed for humans to relate to it. Revit provides this.
@@ -418,35 +431,6 @@ A logical representation of the building is needed for simulation. This can incl
 \end{itemize}
 
 Some objects needs to be part of both representations, others should be it.
-
-\subsection{Occupancy Modeling}
-\label{lessons:occupancy}
-
-The current occupancy model is very primitive and lacks resolution. What we want is per-room granularity and predictability. For this to work we need a room connectivity graph to model how an occupant can move from one room to another, and a per-occupant agent to model the movement of individual occupants. The logic of these agents could potentially be generated from real-world traces. This level of realism would allow building logic to perform preemptive actions across space. The current model only allows us to do this across time.
-
-\subsection{Repeatability}
-
-% motivation
-A key use case for simulators is to enable users to compare multiple implementations. In a simulator we have the opportunity to make sure that two runs generate the exact same conditions for the client software. This is among other things used for verifying that adding a feature has no negative side-effects.
-
-% how
-There are two things that can break this. The first is if the simulator relies on some live data, like meteorological data from weather stations. We are not doing this. The second is models relying on random generators. We have a few of these. By allowing the users to seed the generator with a known value we can ensure a fixed sequence of random numbers and that will provide repeatability.
-
-\subsection{Testability}
-
-% HAL testing
-Buildings interacts with their environment and that environment has a yearly cycle. Testing the control logic thus requires a full year of simulation time. This needs to be doable within a reasonable amount of time. In order to reach this goal it might be necessary to lower the granularity of simulation.
-
-\subsection{Trace-based Modeling}
-
-% motivation: model realism
-All currently implemented models suffer from heavily simplified implementations. Some use random numbers to appear less artificial, but this use is not grounded in insights into the phenomena in question.
-
-% how: gathering traces
-One alternative is to gather traces from the real world and incorporate them into the models of the simulator. If we log the values from the occupancy sensors commonly found in a building then we will be able to feed this trace into the simulator and know that the results we see are derived from ground truth. This would result in a much higher credibility than the current occupancy model.
-
-% example(climograph interpolation), interpolation (sinc), Nyquist
-If we apply a similar technique to the environmental model we could start with a climograph of the area. This introduces the problem of granularity. The climograph provides 12 samples per year and our steps are in the order of a second. Interpolation is needed. For low-frequency dataset -- with sampling above the Nyquist frequency -- the best approach seems to be to apply the $\mathrm{sinc}$ function. In noisy datasets it will generate ripple anomalies though.
 
 \subsection{Cross-layer Communication}
 
@@ -472,6 +456,22 @@ map(lambda e: e(), connections)
 \end{figure}
 
 \subsection{Dependency-based Calculation}
+
+\subsection{Occupancy Modeling}
+\label{lessons:occupancy}
+
+The current occupancy model is very primitive and lacks resolution. What we want is per-room granularity and predictability. For this to work we need a room connectivity graph to model how an occupant can move from one room to another, and a per-occupant agent to model the movement of individual occupants. The logic of these agents could potentially be generated from real-world traces. This level of realism would allow building logic to perform preemptive actions across space. The current model only allows us to do this across time.
+
+\subsection{Trace-based Modeling}
+
+% motivation: model realism
+All currently implemented models suffer from heavily simplified implementations. Some use random numbers to appear less artificial, but this use is not grounded in insights into the phenomena in question.
+
+% how: gathering traces
+One alternative is to gather traces from the real world and incorporate them into the models of the simulator. If we log the values from the occupancy sensors commonly found in a building then we will be able to feed this trace into the simulator and know that the results we see are derived from ground truth. This would result in a much higher credibility than the current occupancy model.
+
+% example(climograph interpolation), interpolation (sinc), Nyquist
+If we apply a similar technique to the environmental model we could start with a climograph of the area. This introduces the problem of granularity. The climograph provides 12 samples per year and our steps are in the order of a second. Interpolation is needed. For low-frequency dataset -- with sampling above the Nyquist frequency -- the best approach seems to be to apply the $\mathrm{sinc}$ function. In noisy datasets it will generate ripple anomalies though.
 
 \subsection{Development Efficiency}
 
