@@ -457,6 +457,11 @@ map(lambda e: e(), connections)
 
 \subsection{Dependency-based Calculation}
 
+The topic of dependency resolution during calculation is not currently solved. This means that some calculations can be off by one cycle. This is not a big issue as one cycle is 100ms in simulated time. However, it reveals a flaw in the current implementation of the interlayer logic.
+
+The right solution\textsuperscript{\textregistered} is to do calculations as a resolver moves through a dependency graph. This graph should span every piece of logic in the simulator code: objects, models and layer connections. This approach keeps the complexity down as the model grows.
+
+
 \subsection{Occupancy Modeling}
 \label{lessons:occupancy}
 
