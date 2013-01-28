@@ -96,14 +96,14 @@ Modern buildings incorporate a wide array of sensors and actuators. They are typ
 \begin{itemize}
   \item \textbf{if} rain \textbf{then} window.close()
   \item \textbf{if} room[3].temp < 20 \textbf{then} room[3].heater.state(ON)
-  \item \textbf{if} room[0].motion(last 30 min) \textbf{then} room[3].light.state(OFF)
+  \item \textbf{if} \textbf{not} room[0].motion(last 30 min) \textbf{then} room[3].light.state(OFF)
 \end{itemize}
 
 % motivation: why write code for a building?
-In a time when people are starting to realize the impact of climate change legislation has been introduced in order to limit the use of fossil fuels. A significant amount of the energy used today is spent in buildings. Still, little is known about how buildings are used and the tolerances of the factors influencing the experience of the occupants. With experience in these areas we can make informed decisions about the tradeoffs involved in running a building.
+In a time when people are starting to realize the impact of climate change legislation has been introduced in order to limit the use of fossil fuels. A significant amount of the energy used today is spent in buildings. Still, little is known about how buildings are used and the tolerances of the factors influencing the experience of the occupants. With insights into these areas we can make informed decisions about the tradeoffs involved in running a building.
 
 % testing: testbed,simulation
-Buildings a complex systems with multiple layers of controllable services. Writing code for such a system requires a considerable amount of testing. It is paramount that the software controlling the building not turn off the electricity during normal operation. The same goes for water, ventilation, heating and cooling. For this reason many rely on full-scale building testbeds. This is obviously an expensive solution. The alternative is to \textsl{simulate} the building, and with it comes compromises.
+Buildings are complex systems with multiple layers of controllable services. Writing code for such a system requires a considerable amount of testing. It is paramount that the software controlling the building not turn off the electricity during normal operation. The same goes for water, ventilation, heating and cooling. For this reason many rely on full-scale building testbeds. This is obviously an expensive solution. The alternative is to \textsl{simulate} the building, and with it comes compromises.
 
 \begin{figure}[hb]
   \begin{subfigure}[b]{0.5\textwidth}
@@ -124,7 +124,7 @@ Buildings a complex systems with multiple layers of controllable services. Writi
 \end{figure}
 
 % the simulator: discrete event simulator
-This paper describes the setup of a discrete event building simulator and the limitations it brings. The simulator steps through time in discrete steps. For each step it calculates the state of the building based on the prior state, the temporal increment and any pending actions. The idea -- as illustrated in figure \ref{fig:interfacing} -- is to provide an interface similar to that of a real building so that code can be moved to a real-world deployment with a minimal amount of modification.
+This paper describes the setup of a discrete event simulator for buildings and the limitations it brings. The simulator steps through time in discrete steps. For each step it calculates the state of the building based on the prior state, the temporal increment and any pending actions. The idea -- as illustrated in figure \ref{fig:interfacing} -- is to provide an interface similar to that of a real building so that code can be moved to a real-world deployment with a minimal amount of modification.
 
 % layout of paper
 In section \ref{sec:internals} we describe the internal workings of the simulator at a high level. In section \ref{sec:interface} we describe two levels of interfaces to the simulator. For the high-level interface we list requirements and give instructions for installation. In section \ref{sec:lessons} we write about the lessons we learned during the development of this simulator.
@@ -162,11 +162,11 @@ In the simulator time is measured in seconds and a year is 365 days. There is no
 \subsection{Objects}
 
 % this section allows us to serialize the description
-Most simulated objects interact with multiple layers. This section provides a short functional description of the relevant objects. Objects have static properties and dynamic properties. In this section we will stick to the static properties as these are the ones which needs to be set up during the initial phase. The simulator will spin without access to the dynamic properties. The dynamic properties are discoverable.
+Most simulated objects interact with multiple layers. This section provides a short functional description of the relevant objects. Objects have both static and dynamic properties. In this section we will stick to the static properties as these are the ones which needs to be set up during the initial phase. The simulator will spin without access to the dynamic properties. The dynamic properties are discoverable.
 
 \subsubsection{Generators}
 
-The generators consume petrol which is stored in tanks. They have to be primed in order to be capable of turning on. Turning a generator on \textsl{unprimes} it. The priming process needs to be done manually in real-life but we allow it to be done through software for the simulation. The following properties define that translation process:
+The generators consume petrol which is stored in tanks. They have to be primed in order to be capable of turning on. Turning on a generator \textsl{unprimes} it. The priming process needs to be done manually in real-life but we allow it to be done through software for the simulation. The following properties define that translation process:
 \begin{itemize}
 \descitem{Capacity} How much energy the generator produces when on.
 \descitem{Efficiency} A scale for how much electrical energy is generated per unit of gas.
@@ -257,7 +257,7 @@ The environment layer consists of models for sun (section \ref{sec:internals:mod
 \subsubsection{Hydro Layer}
 
 % basics
-The hydro layer models flows of water. Figure \ref{fig:hydro} shows the default configuration of the hydro layer. Water is distributed through a hub modeled as a multiplexer. Inputs can come from either the water mains or a basin which is stores collected rain water. Whenever it rains water flows into the basin.
+The hydro layer models flows of water. Figure \ref{fig:hydro} shows the default configuration of the hydro layer. Water is distributed through a hub modeled as a multiplexer. Inputs can come from either the water mains or a basin which stores collected rain water. Whenever it rains water flows into the basin.
 
 \begin{figure}[htb]
   \begin{center}
@@ -294,16 +294,21 @@ A simple grid blackout model has been implemented. The functionality of lamps, b
 
 \subsubsection{Thermal Layer}
 
-At the thermal layer the building is modeled as a room adjacency graph. Nodes represents rooms, heaters, aircons and the outside environment. The heat distribution is essentially modeled through successive overrelaxation of the edges at a granularity of 0.1 second, independently of the temporal granularity of the rest of the simulation. Each edge is associated with a thermal conductivity factor in the range of [0;1]. These values are chosen to prevent positive feedback in the simulation.
+At the thermal layer the building is modeled as a room adjacency graph. Nodes represents rooms, heaters, air conditioners and the outside environment. The heat distribution is essentially modeled through successive overrelaxation of the edges at a granularity of 0.1 second, independently of the temporal granularity of the rest of the simulation. Each edge is associated with a thermal conductivity factor in the range of [0;1]. These values are chosen to prevent positive feedback in the simulation.
 
 \subsubsection{Light Layer}
 
 % basics
 Light is simulated at a per-room basis. It is calculated as
 \begin{eqnarray}
-  \nonumber L = \sum_{i=0}^{all} \mathbf{lamps}[i] + \sum_{i=0}^{all} \left(\mathbf{has\_blinds}[i] ~?~ \mathbf{blinds}[i] : 1\right) \cdot \mathbf{windows}[i] \cdot \mathbf{cloud} \cdot \mathbf{sun}
+  \nonumber L =
+            \sum_{i=0}^{\mathrm{room}} \mathbf{lamps}[i] +
+            \sum_{j=0}^{\mathrm{room}}
+            \left(
+              \mathbf{has\_blinds}[j] ~?~ \mathbf{blinds}[j] : 1
+            \right) \cdot \mathbf{windows}[j] \cdot \mathbf{cloud} \cdot \mathbf{sun}
 \end{eqnarray}
-where $\mathbf{blinds}[i]$ is a factor in the range of [0;1] defining how much light is allowed to pass through the window of size $\mathbf{windows}[i]$. The metric is more-or-less the combined photonic energy in the room. Distribution and spectrum of light is not simulated.
+where $\mathbf{blinds}[j]$ is a factor in the range of [0;1] defining how much light is allowed to pass through the window of size $\mathbf{windows}[j]$. The metric is more-or-less the combined photonic energy in the room. Distribution and spectrum of light is not simulated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -397,7 +402,7 @@ The big question when writing a building simulator is what should be simulated a
 
 \subsection{Metrics}
 
-One of the lessons learned was that the simulator should use -- and respect -- real metrics. This means that the unit of water consumption is L, the flow of energy is J/s and so on. It also means that the calculations should be correct.
+One of the lessons learned was that the simulator should use -- and respect -- real metrics. This means that the unit of water consumption is L, the flow of energy is J/s and so on. It also means that the calculations should be correct. This makes it easier to verify correctness.
 
 \subsection{Building Representation}
 
@@ -406,9 +411,9 @@ A physical representation of the building is needed for humans to relate to it. 
 A logical representation of the building is needed for simulation. This can include
 \begin{itemize}
   \descitem{Room adjacency graph} Which rooms share walls. This is needed for simulation the thermal behavior of the building.
-  \descitem{Room connectivity graph} Which rooms share doors. This is needed for occupant behavior modeling. See section \ref{lessons:occupancy}.
+  \descitem{Room connectivity graph} Which rooms share doors. This can be needed for occupant behavior modeling. See section \ref{lessons:occupancy}.
   \descitem{Energy distribution graph} How is the energy distribution graph constructed. Note that it should be modeled as a graph -- not a tree -- for the general case.
-  \descitem{Water distribution graph} How is the energy distribution graph constructed. This is very similar to the energy distribution graph.
+  \descitem{Water distribution graph} How is the water distribution graph constructed. This is very similar to the energy distribution graph.
   \descitem{Models} for sun, rain, clouds, occupancy and so on.
 \end{itemize}
 
@@ -417,7 +422,7 @@ Some objects needs to be part of both representations, others should be it.
 \subsection{Occupancy Modeling}
 \label{lessons:occupancy}
 
-The current occupancy model is very primitive and lacks resolution. What we want is per-room granularity and predictability. For this to work we need a room connectivity graph to model how an occupant can move from one room to another, and a per-occupant agent to model the movement of individual occupants. The logic of these agents could potentially be generated from real-world traces. This level of realism would allow building logic to perform preemptive actions across space. The current model only allows us to do that across time.
+The current occupancy model is very primitive and lacks resolution. What we want is per-room granularity and predictability. For this to work we need a room connectivity graph to model how an occupant can move from one room to another, and a per-occupant agent to model the movement of individual occupants. The logic of these agents could potentially be generated from real-world traces. This level of realism would allow building logic to perform preemptive actions across space. The current model only allows us to do this across time.
 
 \subsection{Repeatability}
 
@@ -425,7 +430,7 @@ The current occupancy model is very primitive and lacks resolution. What we want
 A key use case for simulators is to enable users to compare multiple implementations. In a simulator we have the opportunity to make sure that two runs generate the exact same conditions for the client software. This is among other things used for verifying that adding a feature has no negative side-effects.
 
 % how
-There are two things that can break this. The first is if the simulator relies on some live data, like weather stations. We are not doing this. The second is models relying on random generators. We have a few of these. By allowing the users to seed the generator with a known value we can ensure a fixed sequence of random numbers and that will provide repeatability.
+There are two things that can break this. The first is if the simulator relies on some live data, like meteorological data from weather stations. We are not doing this. The second is models relying on random generators. We have a few of these. By allowing the users to seed the generator with a known value we can ensure a fixed sequence of random numbers and that will provide repeatability.
 
 \subsection{Testability}
 
@@ -435,13 +440,13 @@ Buildings interacts with their environment and that environment has a yearly cyc
 \subsection{Trace-based Modeling}
 
 % motivation: model realism
-All currently implemented models suffer from heavily simplified implementations. Some use random numbers to appear less artificial, but they are not grounded in insights into the phenomena in question.
+All currently implemented models suffer from heavily simplified implementations. Some use random numbers to appear less artificial, but this use is not grounded in insights into the phenomena in question.
 
 % how: gathering traces
-An alternative is to gather traces from the real world and incorporate them into the models of the simulator. If we log the values from the occupancy sensors around found in a building then we will be able to feed this into the simulator and know that the results we see are derived from ground truth. This would result in a much higher credibility than the current occupancy model.
+One alternative is to gather traces from the real world and incorporate them into the models of the simulator. If we log the values from the occupancy sensors commonly found in a building then we will be able to feed this trace into the simulator and know that the results we see are derived from ground truth. This would result in a much higher credibility than the current occupancy model.
 
 % example(climograph interpolation), interpolation (sinc), Nyquist
-If we apply a similar technique to the environmental model we could start with a climograph of the area. This introduces the problem of granularity. The climograph provides 12 samples per year and our steps are in the order of a second. Interpolation is needed. For low-frequency dataset -- with sampling above the Nyquist frequency -- the best approach seems to be the $\mathrm{sinc}$ function. In noisy datasets it will generate ripple anomalies though.
+If we apply a similar technique to the environmental model we could start with a climograph of the area. This introduces the problem of granularity. The climograph provides 12 samples per year and our steps are in the order of a second. Interpolation is needed. For low-frequency dataset -- with sampling above the Nyquist frequency -- the best approach seems to be to apply the $\mathrm{sinc}$ function. In noisy datasets it will generate ripple anomalies though.
 
 \subsection{Cross-layer Communication}
 
@@ -465,6 +470,8 @@ map(lambda e: e(), connections)
   \caption{Python code for pulling and pushing data between objects.}
   \label{fig:lessons:xlayer}
 \end{figure}
+
+\subsection{Dependency-based Calculation}
 
 \subsection{Development Efficiency}
 
