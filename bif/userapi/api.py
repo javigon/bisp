@@ -103,13 +103,6 @@ class BuildingResource(Resource):
 
         data._query = methodtype.lower();
 
-#        if hasattr(request, 'GET'):
-#            # Grab a mutable copy.
-#            filters = request.GET.copy()
-
-        #if filters['query'] is None:
-        #    raise NotFound
-
         return data
 
     @classmethod
@@ -169,12 +162,11 @@ class BuildingResource(Resource):
 
         root = dict()
         root['rooms'] = rooms
-        #print root
         return root
 
     @classmethod
     def set_service(self, path):
-        ''' format /api/user/building/entry/set/service_id/value where service_id is the 
+        ''' format /api/user/building/entry/set/buildingid/service_id/value where service_id is the 
             service id and value is the value that you wish to set for the actuator/service.'''
         
         if len(path) < self.PATH_START_IDX + 4:
