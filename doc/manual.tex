@@ -435,10 +435,13 @@ Buildings interacts with their environment and that environment has a yearly cyc
 \subsection{Trace-based Modeling}
 
 % motivation: model realism
+All currently implemented models suffer from heavily simplified implementations. Some use random numbers to appear less artificial, but they are not grounded in insights into the phenomena in question.
 
-% how: gathering, interpolation (sinc), Nyquist
+% how: gathering traces
+An alternative is to gather traces from the real world and incorporate them into the models of the simulator. If we log the values from the occupancy sensors around found in a building then we will be able to feed this into the simulator and know that the results we see are derived from ground truth. This would result in a much higher credibility than the current occupancy model.
 
-% example: climograph interpolation
+% example(climograph interpolation), interpolation (sinc), Nyquist
+If we apply a similar technique to the environmental model we could start with a climograph of the area. This introduces the problem of granularity. The climograph provides 12 samples per year and our steps are in the order of a second. Interpolation is needed. For low-frequency dataset -- with sampling above the Nyquist frequency -- the best approach seems to be the $\mathrm{sinc}$ function. In noisy datasets it will generate ripple anomalies though.
 
 \subsection{Cross-layer Communication}
 
