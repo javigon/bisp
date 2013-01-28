@@ -43,7 +43,6 @@ class BlueprintHandler:
                 m = Measurement()
                 m.bid = self.blueprint.building.buildingID
                 m.timestamp = datetime.utcnow().replace(tzinfo=utc)
-                print k
                 m.uuid = k
                 m.val = g[k]
                 m.save()
@@ -54,7 +53,8 @@ class BlueprintHandler:
     def init_scheduler(self):
         schedule_store = RAMJobStore()
 
-        job_second = self.scheduler.add_interval_job(self.do_step, 0, 0, 0, 0, 2)
+        # Write data every 15 seconds.
+        job_second = self.scheduler.add_interval_job(self.do_step, 0, 0, 0, 0, 15)
 
         schedule_store.add_job(job_second)
 

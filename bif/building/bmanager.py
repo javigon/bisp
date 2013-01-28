@@ -31,8 +31,9 @@ def _Manager__init_simulator(building, queue):
         bh = BlueprintHandler.BlueprintHandler(blueprint, True)
         bh.start(queue)
         
-        time.sleep(100000)
-        print 'Ended the process'
+        while 1:
+            time.sleep(10000)
+            
     except:
         print "Unexpected error:", sys.exc_info()[:2]
         traceback.print_tb(sys.exc_info()[2])

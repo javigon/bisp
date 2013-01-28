@@ -44,16 +44,16 @@ class BluePrint():
         # Set environmental light
         self.lightscale = CNodeMul(map(lambda e: (e, "b"), lightwindows))  # "environment.light"
         self.lightscalefactor = CNodeConst([(self.lightscale, "a")], 11.43, self.cnodelist)  # scaling "from" temperature "to" light
-        interface.register_get("environment.light", self.lightscale, lambda obj: obj.value)
+        interface.register_get("environment-light", self.lightscale, lambda obj: obj.value)
 
         # environment
         self.cloud = TCloud(self.yearlimit * DAYS_PER_YEAR, self.yearlimit * 130)
         self.cnoutside = CNodeSun([(self.lightscale, "b")], self.cloud, tlist)
         self.cnrain = CNodeRain([], self.cloud, tlist)
         self.rainmodel = TNodeExposed(0, self.nodelist, self.cnrain, True)
-        interface.register_get("environment.time", self.cnoutside, CNodeSun.get_value)
-        interface.register_get("environment.cloudiness", self.cnoutside, lambda obj: CNodeSun.get_value(obj, "cloudiness"))
-        interface.register_get("environment.rain", self.cnrain, lambda obj: CNodeRain.get_value(obj, "rain"))
+        interface.register_get("environment-time", self.cnoutside, CNodeSun.get_value)
+        interface.register_get("environment-cloudiness", self.cnoutside, lambda obj: CNodeSun.get_value(obj, "cloudiness"))
+        interface.register_get("environment-rain", self.cnrain, lambda obj: CNodeRain.get_value(obj, "rain"))
 
         # occupancy
         self.occupancy = OccupancySimple(self.yearlimit * DAYS_PER_YEAR, 2, somelist=tlist)
@@ -62,7 +62,7 @@ class BluePrint():
         self.occupancyconsumption = CNodeMul([(self.consumption, "b")])
         self.occupancyscale = CNodeConst([(self.occupancyconsumption, "a")], 0.0056, self.cnodelist)  # occupancy -> water consumption scale
         self.occupancycnode = CNodePull(lambda: self.occupancy.index(), [(self.occupancyconsumption, "b")], updatelist=self.cnodelist)  # link to OccupancySimple object
-        interface.register_get("environment.occupancy", self.occupancy, OccupancySimple.index)
+        interface.register_get("environment-occupancy", self.occupancy, OccupancySimple.index)
 
         # hydro layer
         self.generators = FNodeList()
@@ -75,18 +75,18 @@ class BluePrint():
         self.htank = FNodeTank(100, 10, self.rain, self.buffers)
         self.hmux = FNodeMultiplexer([self.mains, self.htank], 0)
         self.tap = FNodeTap(self.hmux, 100, 60, self.consumers)
-        interface.register_get("hydro.mains.state", self.mains, lambda obj: FNodeSource.get_value(obj, "state"))
-        interface.register_set("hydro.mains.state", self.mains, lambda obj, value: FNodeSource.set_value(obj, "state", value))
-        interface.register_get("hydro.rain.production", self.rain, lambda obj: FNodeRain.get_value(obj, "output"))
-        interface.register_get("hydro.bassin.level", self.htank, lambda obj: FNodeTank.get_value(obj, "level"))
-        interface.register_get("hydro.bassin.input", self.htank, lambda obj: FNodeTank.get_value(obj, "input"))
-        interface.register_get("hydro.consumption", self.consumption, lambda obj: obj.value)
-        interface.register_get("hydro.mux.accepted", self.hmux, lambda obj: FNodeMultiplexer.get_value(obj, "accepted"))
-        interface.register_get("hydro.mux.select", self.hmux, lambda obj: FNodeMultiplexer.get_value(obj, "sel"))
-        interface.register_set("hydro.mux.select", self.hmux, lambda obj, value: FNodeMultiplexer.set_value(obj, "sel", value))
-        interface.register_get("hydro.tap.production", self.tap, lambda obj: FNodeTap.get_value(obj, "output"))
-        interface.register_get("hydro.tap.state", self.tap, lambda obj: FNodeTap.get_value(obj, "state"))
-        interface.register_set("hydro.tap.state", self.tap, lambda obj, value: FNodeTap.set_value(obj, "state", value))
+        interface.register_get("hydro-mains-state", self.mains, lambda obj: FNodeSource.get_value(obj, "state"))
+        interface.register_set("hydro-mains-state", self.mains, lambda obj, value: FNodeSource.set_value(obj, "state", value))
+        interface.register_get("hydro-rain-production", self.rain, lambda obj: FNodeRain.get_value(obj, "output"))
+        interface.register_get("hydro-bassin-level", self.htank, lambda obj: FNodeTank.get_value(obj, "level"))
+        interface.register_get("hydro-bassin-input", self.htank, lambda obj: FNodeTank.get_value(obj, "input"))
+        interface.register_get("hydro-consumption", self.consumption, lambda obj: obj.value)
+        interface.register_get("hydro-mux-accepted", self.hmux, lambda obj: FNodeMultiplexer.get_value(obj, "accepted"))
+        interface.register_get("hydro-mux-select", self.hmux, lambda obj: FNodeMultiplexer.get_value(obj, "sel"))
+        interface.register_set("hydro-mux-select", self.hmux, lambda obj, value: FNodeMultiplexer.set_value(obj, "sel", value))
+        interface.register_get("hydro-tap-production", self.tap, lambda obj: FNodeTap.get_value(obj, "output"))
+        interface.register_get("hydro-tap-state", self.tap, lambda obj: FNodeTap.get_value(obj, "state"))
+        interface.register_set("hydro-tap-state", self.tap, lambda obj, value: FNodeTap.set_value(obj, "state", value))
 
         # energy layer
         self.etank1 = FNodeTank(20, 12)
@@ -101,28 +101,28 @@ class BluePrint():
         self.battery2 = FNodeBattery(100, 2, self.generator2, self.buffers)
         self.battery3 = FNodeBattery(100, 3, self.panel, self.buffers)
         self.emux = FNodeMultiplexer([self.grid, self.battery1, self.battery2, self.battery3], 0)
-        interface.register_get("energy.fuel-1.level", self.etank1, lambda obj: FNodeTank.get_value(obj, "level"))
-        interface.register_get("energy.fuel-1.input", self.etank1, lambda obj: FNodeTank.get_value(obj, "input"))
-        interface.register_get("energy.fuel-2.level", self.etank2, lambda obj: FNodeTank.get_value(obj, "level"))
-        interface.register_get("energy.fuel-2.input", self.etank2, lambda obj: FNodeTank.get_value(obj, "input"))
-        interface.register_get("energy.grid.state", self.grid, lambda obj: FNodeSource.get_value(obj, "state"))
-        interface.register_set("energy.grid.state", self.grid, lambda obj, value: FNodeSource.set_value(obj, "state", value))
-        interface.register_get("energy.generator-1.production", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "output"))
-        interface.register_get("energy.generator-1.state", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "state"))
-        interface.register_set("energy.generator-1.state", self.generator1, lambda obj, value: FNodeGenerator.set_value(obj, "state", value))
-        interface.register_get("energy.generator-1.primed", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "primed"))
-        interface.register_set("energy.generator-1.primed", self.generator1, lambda obj, value: FNodeGenerator.set_value(obj, "primed", value))
-        interface.register_get("energy.generator-2.production", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "output"))
-        interface.register_get("energy.generator-2.state", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "state"))
-        interface.register_set("energy.generator-2.state", self.generator2, lambda obj, value: FNodeGenerator.set_value(obj, "state", value))
-        interface.register_get("energy.generator-2.primed", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "primed"))
-        interface.register_set("energy.generator-2.primed", self.generator2, lambda obj, value: FNodeGenerator.set_value(obj, "primed", value))
-        interface.register_get("energy.panel.production", self.panel, lambda obj: FNodePanel.get_value(obj, "output"))
-        interface.register_get("energy.battery-1.level", self.battery1, FNodeBattery.get_value)
-        interface.register_get("energy.battery-2.level", self.battery2, FNodeBattery.get_value)
-        interface.register_get("energy.battery-3.level", self.battery3, FNodeBattery.get_value)
-        interface.register_get("energy.mux.select", self.emux, lambda obj: FNodeMultiplexer.get_value(obj, "sel"))
-        interface.register_set("energy.mux.select", self.emux, lambda obj, value: FNodeMultiplexer.set_value(obj, "sel", value))
+        interface.register_get("energy-fuel-1-level", self.etank1, lambda obj: FNodeTank.get_value(obj, "level"))
+        interface.register_get("energy-fuel-1-input", self.etank1, lambda obj: FNodeTank.get_value(obj, "input"))
+        interface.register_get("energy-fuel-2-level", self.etank2, lambda obj: FNodeTank.get_value(obj, "level"))
+        interface.register_get("energy-fuel-2-input", self.etank2, lambda obj: FNodeTank.get_value(obj, "input"))
+        interface.register_get("energy-grid-state", self.grid, lambda obj: FNodeSource.get_value(obj, "state"))
+        interface.register_set("energy-grid-state", self.grid, lambda obj, value: FNodeSource.set_value(obj, "state", value))
+        interface.register_get("energy-generator-1-production", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "output"))
+        interface.register_get("energy-generator-1-state", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "state"))
+        interface.register_set("energy-generator-1-state", self.generator1, lambda obj, value: FNodeGenerator.set_value(obj, "state", value))
+        interface.register_get("energy-generator-1-primed", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "primed"))
+        interface.register_set("energy-generator-1-primed", self.generator1, lambda obj, value: FNodeGenerator.set_value(obj, "primed", value))
+        interface.register_get("energy-generator-2-production", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "output"))
+        interface.register_get("energy-generator-2-state", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "state"))
+        interface.register_set("energy-generator-2-state", self.generator2, lambda obj, value: FNodeGenerator.set_value(obj, "state", value))
+        interface.register_get("energy-generator-2-primed", self.generator2, lambda obj: FNodeGenerator.get_value(obj, "primed"))
+        interface.register_set("energy-generator-2-primed", self.generator2, lambda obj, value: FNodeGenerator.set_value(obj, "primed", value))
+        interface.register_get("energy-panel-production", self.panel, lambda obj: FNodePanel.get_value(obj, "output"))
+        interface.register_get("energy-battery-1-level", self.battery1, FNodeBattery.get_value)
+        interface.register_get("energy-battery-2-level", self.battery2, FNodeBattery.get_value)
+        interface.register_get("energy-battery-3-level", self.battery3, FNodeBattery.get_value)
+        interface.register_get("energy-mux-select", self.emux, lambda obj: FNodeMultiplexer.get_value(obj, "sel"))
+        interface.register_set("energy-mux-select", self.emux, lambda obj, value: FNodeMultiplexer.set_value(obj, "sel", value))
 
         # environment
         self.world = TWorld(self.nodelist, self.edgelist)
@@ -141,7 +141,7 @@ class BluePrint():
 
             # lamps
             lightSum = CNodeSum([], len(room.getLights()) + len(room.getBlinders()))
-            interface.register_get(str(room.getLogicalID()) + ".light", lightSum, lambda obj: obj.value)
+            interface.register_get(str(room.getLogicalID()) + "-light", lightSum, lambda obj: obj.value)
 
             i = 0
             for lamp in room.getLights():
@@ -152,11 +152,11 @@ class BluePrint():
                 lightLamp = CNodeConst([(lightSum, str(i))], initial, self.cnodelist)
                 nodeLamp =  FNodeLamp(self.emux, wattage, lum, consumers=self.consumers, ocnode=lightLamp) #?
 
-                interface.register_get(str(lamp.getLogicalID()) + ".production",  nodeLamp, lambda obj: FNodeLamp.get_value(obj, "output"))
-                interface.register_get(str(lamp.getLogicalID()) + ".state", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "state"))
-                interface.register_get(str(lamp.getLogicalID()) + ".gain", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "gain"))
+                interface.register_get(str(lamp.getLogicalID()) + "-production",  nodeLamp, lambda obj: FNodeLamp.get_value(obj, "output"))
+                interface.register_get(str(lamp.getLogicalID()) + "-state", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "state"))
+                interface.register_get(str(lamp.getLogicalID()) + "-gain", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "gain"))
 
-                interface.register_set(str(lamp.getLogicalID()) + ".gain", nodeLamp, lambda obj, value: FNodeLamp.set_value(obj, "gain", value))
+                interface.register_set(str(lamp.getLogicalID()) + "-gain", nodeLamp, lambda obj, value: FNodeLamp.set_value(obj, "gain", value))
 
             # blinds
             for blind in room.getBlinders():
@@ -173,11 +173,11 @@ class BluePrint():
 
                 CNodeConst([(nodeLightWindow, "a")], size, self.cnodelist)  # size of window
 
-                interface.register_get(str(blind.getLogicalID()) + ".setpoint", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "setpoint"))
-                interface.register_get(str(blind.getLogicalID()) + ".value", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "value"))
+                interface.register_get(str(blind.getLogicalID()) + "-setpoint", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "setpoint"))
+                interface.register_get(str(blind.getLogicalID()) + "-value", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "value"))
 
-                interface.register_set(str(blind.getLogicalID()) + ".setpoint", nodeBlind, lambda obj, value: FNodeBlinds.set_value(obj, "setpoint", value))
-                interface.register_set(str(blind.getLogicalID()) + ".value", nodeBlind, lambda obj, value: FNodeBlinds.set_value(obj, "value", value))
+                interface.register_set(str(blind.getLogicalID()) + "-setpoint", nodeBlind, lambda obj, value: FNodeBlinds.set_value(obj, "setpoint", value))
+                interface.register_set(str(blind.getLogicalID()) + "-value", nodeBlind, lambda obj, value: FNodeBlinds.set_value(obj, "value", value))
 
             # heaters
             for heater in room.getHeaters():
@@ -186,11 +186,11 @@ class BluePrint():
 
                 CNodePullPush(lambda: nodeRoom.get_value() + nodeHeater.get_value("output"), lambda v: heatNode.set_value(v), updatelist=self.cnodelist)
 
-                interface.register_get(str(heater.getLogicalID()) + ".production", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "output"))
-                interface.register_get(str(heater.getLogicalID()) + ".state", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "state"))
-                interface.register_get(str(heater.getLogicalID()) + ".gain", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "gain"))
+                interface.register_get(str(heater.getLogicalID()) + "-production", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "output"))
+                interface.register_get(str(heater.getLogicalID()) + "-state", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "state"))
+                interface.register_get(str(heater.getLogicalID()) + "-gain", nodeHeater, lambda obj: FNodeHeater.get_value(obj, "gain"))
 
-                interface.register_set(str(heater.getLogicalID()) + ".gain", nodeHeater, lambda obj, value: FNodeHeater.set_value(obj, "gain", value))
+                interface.register_set(str(heater.getLogicalID()) + "-gain", nodeHeater, lambda obj, value: FNodeHeater.set_value(obj, "gain", value))
 
             # aircon
             for ac in room.getAcs():
@@ -199,11 +199,11 @@ class BluePrint():
 
                 CNodePullPush(lambda: nodeRoom.get_value() + nodeAc.get_value("output"), lambda v: heatNode.set_value(v), updatelist=self.cnodelist)
 
-                interface.register_get(str(ac.getLogicalID()) + ".production", nodeAc, lambda obj: FNodeHeater.get_value(obj, "output"))
-                interface.register_get(str(ac.getLogicalID()) + ".state", nodeAc, lambda obj: FNodeHeater.get_value(obj, "state"))
-                interface.register_get(str(ac.getLogicalID()) + ".gain", nodeAc, lambda obj: FNodeHeater.get_value(obj, "gain"))
+                interface.register_get(str(ac.getLogicalID()) + "-production", nodeAc, lambda obj: FNodeHeater.get_value(obj, "output"))
+                interface.register_get(str(ac.getLogicalID()) + "-state", nodeAc, lambda obj: FNodeHeater.get_value(obj, "state"))
+                interface.register_get(str(ac.getLogicalID()) + "-gain", nodeAc, lambda obj: FNodeHeater.get_value(obj, "gain"))
 
-                interface.register_set(str(ac.getLogicalID()) + ".gain", nodeAc, lambda obj, value: FNodeHeater.set_value(obj, "gain", value))
+                interface.register_set(str(ac.getLogicalID()) + "-gain", nodeAc, lambda obj, value: FNodeHeater.set_value(obj, "gain", value))
 
        
         # Tighten up dependencies
