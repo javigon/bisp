@@ -1,0 +1,105 @@
+#!/usr/bin/env python
+# ex:set ts=2:
+
+import sys
+sys.path.append("..")
+from thermo import *
+
+
+def printworld (outside, hallway, room1, room2):
+  otemp  = str(outside.get_value())
+  htemp  = str(hallway.get_value())
+  r1temp = str(room1.get_value())
+  r2temp = str(room2.get_value())
+  width = 39
+  rwidth = (39-1)/2
+  print "   +-------------------+-------------------+"
+  print "   |" + \
+        (" "*((rwidth-len(r1temp))/2)) + \
+        r1temp + \
+        (" "*((rwidth-len(r1temp)-(rwidth-len(r1temp))/2))) + \
+        "|" + \
+        (" "*((rwidth-len(r2temp))/2)) + \
+        r2temp + \
+        (" "*((rwidth-len(r2temp)-(rwidth-len(r2temp))/2))) + \
+        "|"
+  print "   +---------\\---------+---------\\---------+ "+otemp
+  print "   |" + \
+        (" "*((width-len(htemp))/2)) + \
+        htemp + \
+        (" "*((width-len(htemp)-(width-len(htemp))/2))) + \
+        "\\"
+  print "   +---------------------------------------+"
+  print ""
+
+
+def static (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Static World"
+  
+  nodelist = TNodeList()
+  edgelist = TEdgeList()
+  world = TWorld(nodelist, edgelist)
+  outside = TNode(27, nodelist, True)
+  hallway = TNode(21, nodelist)
+  room1   = TNode(23, nodelist)
+  room2   = TNode(22.3, nodelist)
+  TEdge(outside, hallway, 0.3, edgelist)
+  TEdge(outside, room1, 0.3, edgelist)
+  TEdge(outside, room2, 0.3, edgelist)
+  TEdge(room1, hallway, 0.1, edgelist)
+  TEdge(room2, hallway, 0.1, edgelist)
+  TEdge(room1, room2, 0.1, edgelist)
+  
+  printworld(outside, hallway, room1, room2)
+  for i in range(5):
+    world.step(stepsize)
+    printworld(outside, hallway, room1, room2)
+  print "   Done\n"
+
+def astatic (i):
+  stepsize = 0.1
+  multiplier = 100
+  print " Test "+str(i)+": Accelerated Static World"
+  
+  nodelist = TNodeList()
+  edgelist = TEdgeList()
+  world = TWorld(nodelist, edgelist)
+  outside = TNode(27, nodelist, True)
+  hallway = TNode(21, nodelist)
+  room1   = TNode(23, nodelist)
+  room2   = TNode(22.3, nodelist)
+  TEdge(outside, hallway, 0.3, edgelist)
+  TEdge(outside, room1, 0.3, edgelist)
+  TEdge(outside, room2, 0.3, edgelist)
+  TEdge(room1, hallway, 0.1, edgelist)
+  TEdge(room2, hallway, 0.1, edgelist)
+  TEdge(room1, room2, 0.1, edgelist)
+  
+  printworld(outside, hallway, room1, room2)
+  for i in range(5):
+    for _ in range(multiplier): world.step(stepsize)
+    printworld(outside, hallway, room1, room2)
+  print "   Done\n"
+
+def cloud (i):
+  daycount = 100
+  print " Test "+str(i)+": Cloud cover"
+  
+  cloud = TCloud(daycount, 30)
+  
+  for i in range(daycount):
+    print "   |"+("*"*cloud.map[i])
+  
+  print "   Done\n"
+
+
+tests = [static,
+         astatic,
+         cloud,
+        ]
+print "Running self-test:\n"
+for i in range(len(tests)):
+  test = tests[i]
+  test(i)
+

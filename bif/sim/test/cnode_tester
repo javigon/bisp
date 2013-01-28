@@ -1,0 +1,126 @@
+#!/usr/bin/env python
+# ex:set ts=2:
+
+from math import sqrt
+
+import sys
+sys.path.append("..")
+from cnode import *
+
+
+def add ():
+  val1 = 3.0
+  val2 = 4.0
+  
+  drain = CNodeDrain()
+  a = CNodeAdd([(drain, "a")])
+  c1 = CNodeConst([(a, "a")], val1)
+  c2 = CNodeConst([(a, "b")], val2)
+  source = CNodeSource([(c1, "a"),(c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1+val2: success = "failure"
+  print "- 'add': "+result
+
+def sub ():
+  val1 = 3.0
+  val2 = 4.0
+  
+  drain = CNodeDrain()
+  s = CNodeSub([(drain, "a")])
+  c1 = CNodeConst([(s, "a")], val1)
+  c2 = CNodeConst([(s, "b")], val2)
+  source = CNodeSource([(c1, "a"),(c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1-val2: success = "failure"
+  print "- 'sub': "+result
+
+def mul ():
+  val1 = 3.0
+  val2 = 4.0
+  
+  drain = CNodeDrain()
+  m = CNodeMul([(drain, "a")])
+  c1 = CNodeConst([(m, "a")], val1)
+  c2 = CNodeConst([(m, "b")], val2)
+  source = CNodeSource([(c1, "a"),(c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1*val2: success = "failure"
+  print "- 'mul': "+result
+
+def div ():
+  val1 = 3.0
+  val2 = 4.0
+  
+  drain = CNodeDrain()
+  d = CNodeDiv([(drain, "a")])
+  c1 = CNodeConst([(d, "a")], val1)
+  c2 = CNodeConst([(d, "b")], val2)
+  source = CNodeSource([(c1, "a"),(c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1/val2: success = "failure"
+  print "- 'div': "+result
+
+def mod ():
+  val1 = 3.0
+  val2 = 4.0
+  
+  drain = CNodeDrain()
+  m = CNodeMod([(drain, "a")])
+  c1 = CNodeConst([(m, "a")], val1)
+  c2 = CNodeConst([(m, "b")], val2)
+  source = CNodeSource([(c1, "a"),(c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1%val2: success = "failure"
+  print "- 'mod': "+result
+
+def sum_ ():
+  val1 = 3
+  val2 = 4
+  val3 = 5
+
+  drain = CNodeDrain()
+  d = CNodeSum([(drain, "a")], 3)
+  c1 = CNodeConst([(d, "1")], val1)
+  c2 = CNodeConst([(d, "2")], val2)
+  c3 = CNodeConst([(d, "3")], val3)
+  source = CNodeSource([(c1, "a"), (c2, "a"), (c3, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value() != val1+val2+val3: success = "failure"
+  print "- 'sum': "+result
+
+def pyth ():
+  val1 = 3
+  val2 = 4
+  
+  drain = CNodeDrain()
+  s = CNodeSqrt([(drain, "a")])
+  a = CNodeAdd([(s, "a")])
+  m1 = CNodeMul([(a, "a")])
+  m2 = CNodeMul([(a, "b")])
+  c1 = CNodeConst([(m1, "a"), (m1, "b")], val1)
+  c2 = CNodeConst([(m2, "a"), (m2, "b")], val2)
+  source = CNodeSource([(c1, "a"), (c2, "a")])
+  
+  source.update()
+  result = "success"
+  if drain.value != sqrt(val1*val1+val2*val2): success = "failure"
+  print "- 'pyth': "+result
+
+
+tests = [add, sub, mul, div, mod, sum_, pyth]
+print "Running self-test:"
+for test in tests:
+  test()
+

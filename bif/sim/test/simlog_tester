@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+# ex:set ts=2:
+
+import sys
+sys.path.append("..")
+from simlog import *
+
+log = SimLog("simlog_tester.csv")
+log.legend(["time", "room[1].temp", "room[1].light"])
+log.append(["today", 20.8, "431"])
+log.append(["tomorrow", 21.1, "385", "ups"])
+

@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from sys import *
+
+path.append("..")
+from fileops import *
+
+if len(argv) != 3:
+  print argv[0]+" FILENAME LINENUMBER"
+  exit(1)
+filename = argv[1]
+linenumber = int(argv[2])
+
+lines = readfile(filename)
+print "'"+lines[linenumber]+"'"

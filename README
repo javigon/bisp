@@ -1,0 +1,26 @@
+bisp: Building Information Service Platfrom 1.0
+
+/bin/                Binaries
+/doc/                Documentation
+/doc/manual.*        Manual
+/doc/sketches/       Ideas
+/doc/vocabulary.txt  List of terms
+/src/                Source code
+/src/sim/            Code for simulator
+/src/engine/         Code for the engine connecting everything
+  Dependencies:
+        Python: Django
+        Python: Django-piston
+        Database: MySQL
+/src/frontend/       Code for the interface to the students
+/src/web             Code for the web frontend used by engine.
+/test/               Test cases
+
+Requirements:
+
+django: web framework
+tastypie: web service interface
+networkx: graph library
+APScheduler: scheduling library
+             http://packages.debian.org/sid/python-apscheduler
+

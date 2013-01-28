@@ -1,0 +1,24 @@
+This is a short overview of the design.
+
+Layers:
+- Energy: electricity + diesel
+          Modeled as a FNode graph
+- Hydro:  grey and clear water
+          Modeled as a FNode graph
+- Thermo: termperature
+          Modeled as a RNode graph
+- Light:  solar and artificial
+          Modeled as a CNode graph
+
+Layers are connected by CNode graphs.
+
+Node types:
+- CNode: Calculation Nodes
+         (A calculation DAG)
+- FNode: Flow Nodes
+         - Energy: fuel or electrons
+         - Hydro: water molecules
+         - Light: photons
+- TNode: Thermal Nodes
+         (used for a room adjacency graph which relaxation functionality)
+

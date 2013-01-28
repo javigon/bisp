@@ -1,0 +1,4 @@
+Building model:   The model behind the Revit GUI
+Data model:       The representation in our own database
+Simulation model: The model used for simulation
+

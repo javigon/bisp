@@ -1,0 +1,24 @@
+* Fix imports
+  ===========
+  
+  Imports are currently a mess.
+  
+  Proposal 1:
+  ~~~~~~~~~~~
+  - We agree on a root, say /
+  - Every file not located at the root makes sure that sys.path contains a reference to it.
+  - All imports can then be made with a single point of origin
+  - Pros:
+    - A simple solution
+    - Test code can be placed in dedicated directories
+    - No environment variables needs to be set
+
+* Fix indents
+  ===========
+  
+  We have agreed on 4 spaces.
+  
+  Currently this is applied for everything except /sim.
+  
+  We need an automated approach to fix it. I dare no do so by hand.
+

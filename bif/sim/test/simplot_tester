@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# ex:set ts=2:
+
+from datetime import *
+from math import sin, pi
+import random
+
+import sys
+sys.path.append("..")
+from simlog import *
+from simplot import *
+
+def td2secs (td):
+  return float(td.days*(24*3600)+td.seconds + float(td.microseconds)/1000000)
+
+# init
+log = SimLog("simplot_tester.csv")
+log.legend(["time", "room[1].temp", "room[1].light"])
+random.seed(1)
+
+# produce dataset
+time = datetime(2000, 1, 1, 0, 0, 0, 0)
+td = timedelta(0, 0, milliseconds=1000000)
+for i in range(100000):
+  timestr = "%u-%u-%u %u:%u:%f" % (time.year, time.month, time.day,
+                                   time.hour, time.minute,
+                                   time.second+float(time.microsecond)/1000000)
+#  tempstr = str(12.8 +
+#                20 * sin(td2secs(td)*(2*pi)/(364.25*24*3600)) +
+#                5 * random.uniform(0, sin(td2secs(td)*(2*pi*3600*24*30)/(364.25*24*3600))))
+#  lightstr = str(100 +
+#                 300 * sin(td2secs(td)*(2*pi*364.25)/(364.25*24*3600)) +
+#                 50 * random.uniform(0, sin(td2secs(td)*(2*pi*3600*24*364.25/2)/(364.25*24*3600))))
+  tempstr = str(22.8 +
+                10 * sin(td2secs(td*i)*(2*pi)/(364.25*24*3600)))
+  lightstr = str(200 +
+                 100 * sin(td2secs(td*i)*(2*pi*52)/(364.25*24*3600)))
+  log.append([time, tempstr, lightstr])
+  time += td
+
+# generate graph
+graph = SimPlot("simplot_tester", "png")
+graph.append("Time", "Temperature/°C", [log], ["time"], ["room[1].temp"], "lines", ["Baseline"])
+graph.append("Time", "Light/Lux", [log], ["time"], ["room[1].light"], "lines", ["Baseline"])
+graph.generate()

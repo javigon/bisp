@@ -1,0 +1,236 @@
+#!/usr/bin/env python
+# ex:set ts=2:
+
+import sys
+sys.path.append("..")
+from fnode import *
+from cnode import *
+
+
+def battery1lamp (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Battery -----> Lamp"
+  
+  battery = FNodeBattery(100, 90)
+  lamp = FNodeLamp(battery, 100, 60)
+  
+  done = False
+  print "   - Lamp="+str(lamp.state)+" battery="+str(battery.charge)
+  while not done:
+    lamp.step(stepsize)
+    print "   - Lamp="+str(lamp.state)+" battery="+str(battery.charge)
+    if lamp.state == 0: done = True
+  print "   - Done\n"
+
+def battery3lamps (i):
+  stepsize = 0.1
+  lampcount = 3
+  print " Test "+str(i)+": Battery -("+str(lampcount)+")-> Lamps (lampcount="+str(lampcount)+")"
+  
+  battery = FNodeBattery(100, 90)
+  lamps = []
+  for _ in range(lampcount): lamps.append(FNodeLamp(battery, 100, 60))
+  def printstate ():
+    print "   - Lamps=("+\
+          (",".join(map(lambda e: str(e.state), lamps)))+\
+          ") battery="+str(battery.charge)
+  
+  done = False
+  printstate()
+  while not done:
+    for lamp in lamps: lamp.step(stepsize)
+    printstate()
+    if lamps[0].state == 0: done = True
+  print "   - Done\n"
+
+def panelbatterylamp (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": SourceDynamic -----> Panel -----> Battery -----> Lamp"
+  
+  c = CNodeConst([], 11.1)
+  source = FNodeSourceDynamic(c)
+  panel = FNodePanel(source)
+  battery = FNodeBattery(100, 90, panel)
+  lamp = FNodeLamp(battery, 100, 60)
+  
+  done = False
+  print "   - Lamp="+str(lamp.state)+" Battery="+str(battery.charge)
+  while not done:
+    panel.step(stepsize) # generate value for later request
+    battery.step(stepsize)
+    lamp.step(stepsize)
+    print "   - Lamp="+str(lamp.state)+" Battery="+str(battery.charge)
+    if lamp.state == 0: done = True
+  print "   - Done\n"
+
+def panelbattery3lamps (i):
+  stepsize = 0.1
+  lampcount = 3
+  print " Test "+str(i)+": SourceDynamic -----> Panel -----> Battery -("+str(lampcount)+")-> Lamps (lampcount="+str(lampcount)+")"
+  
+  c = CNodeConst([], 11.1)
+  source = FNodeSourceDynamic(c)
+  panel = FNodePanel(source)
+  battery = FNodeBattery(100, 90, panel)
+  lamps = []
+  for _ in range(lampcount): lamps.append(FNodeLamp(battery, 100, 60))
+  def printstate ():
+    print "   - Lamps=("+\
+          (",".join(map(lambda e: str(e.state), lamps)))+\
+          ") battery="+str(battery.charge)
+  
+  done = False
+  printstate()
+  while not done:
+    panel.step(stepsize) # generate value for later request
+    battery.step(stepsize)
+    for lamp in lamps: lamp.step(stepsize)
+    printstate()
+    if lamps[0].state == 0: done = True
+  print "   - Done\n"
+
+def multiplexer (i):
+  stepsize = 0.1
+  batterycount = 2
+  print " Test "+str(i)+": Battery -("+str(batterycount)+")-> Multiplexer -----> Lamp (batterycount="+str(batterycount)+")"
+  
+  sel = 0
+  batteries = []
+  for _ in range(batterycount): batteries.append(FNodeBattery(100, 90))
+  multiplexer = FNodeMultiplexer(batteries, sel)
+  lamp = FNodeLamp(multiplexer, 200, 60)
+  def printstate ():
+    print "   - Lamp="+str(lamp.state)+" Batteries=("+\
+          (",".join(map(lambda e: str(e.charge), batteries)))+\
+          ")"
+  
+  done = False
+  printstate()
+  while not done:
+    lamp.step(stepsize)
+    printstate()
+    if lamp.state == 0:
+      if sel+1==batterycount:
+        done = True
+      else:
+        sel += 1
+        multiplexer.select(sel)
+  print "   - Done\n"
+
+def source (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Source -----> Lamp"
+  
+  source = FNodeSource()
+  lamp = FNodeLamp(source, 100, 60)
+  
+  print "   - Lamp="+str(lamp.state)+" Source="+str(source.state)
+  for i in range(3):
+    lamp.step(stepsize)
+    print "   - Lamp="+str(lamp.state)+" Source="+str(source.state)
+  source.set_value("state", 0)
+  for i in range(3):
+    lamp.step(stepsize)
+    print "   - Lamp="+str(lamp.state)+" Source="+str(source.state)
+  source.set_value("state", 1)
+  for i in range(3):
+    lamp.step(stepsize)
+    print "   - Lamp="+str(lamp.state)+" Source="+str(source.state)
+  print "   - Done\n"
+
+def generator (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Tank -----> Generator -----> Battery -----> Lamp"
+  
+  tank = FNodeTank(20, 12)
+  generator = FNodeGenerator(tank, 1.1, 0.5, 1, True)
+  battery = FNodeBattery(100, 90, generator)
+  lamp = FNodeLamp(battery, 100, 60)
+  def printstate ():
+    print "   - Lamp="+str(lamp.state)+" Battery="+str(battery.charge)+\
+          " Generator=("+str(generator.state)+","+str(generator.primed)+\
+          ") Tank="+str(tank.charge)
+  
+  done = False
+  printstate()
+  while not done:
+    generator.step(stepsize)
+    battery.step(stepsize)
+    lamp.step(stepsize)
+    printstate()
+    if lamp.state == 0: done = True
+  print "   - Done\n"
+
+def taptank (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Tank -----> Tap"
+  
+  tank = FNodeTank(100, 90)
+  tap = FNodeTap(tank, 100)
+  
+  done = False
+  print "   - Tap="+str(tap.state)+" Tank="+str(tank.charge)
+  while not done:
+    tap.step(stepsize)
+    print "   - Tap="+str(tap.state)+" Tank="+str(tank.charge)
+    if tap.state == 0: done = True
+  print "   - Done\n"
+
+def mains (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": Mains -----> Tap"
+  
+  mains = FNodeMains()
+  tap = FNodeTap(mains, 100)
+  
+  print "   - Tap="+str(tap.state)+" Mains="+str(mains.state)
+  for i in range(3):
+    tap.step(stepsize)
+    print "   - Tap="+str(tap.state)+" Mains="+str(mains.state)
+  mains.set_value("state", 0)
+  for i in range(3):
+    tap.step(stepsize)
+    print "   - Tap="+str(tap.state)+" Mains="+str(mains.state)
+  mains.set_value("state", 1)
+  for i in range(3):
+    tap.step(stepsize)
+    print "   - Tap="+str(tap.state)+" Mains="+str(mains.state)
+  print "   - Done\n"
+
+def raintanktap (i):
+  stepsize = 0.1
+  print " Test "+str(i)+": SourceDynamic -----> Rain -----> Tank -----> Tap"
+  
+  c = CNodeConst([], 11.1)
+  source = FNodeSourceDynamic(c)
+  rain = FNodeRain(source)
+  tank = FNodeTank(100, 90, rain)
+  tap = FNodeTap(tank, 100, 60)
+  
+  done = False
+  print "   - Tap="+str(tap.state)+" Tank="+str(tank.charge)
+  while not done:
+    rain.step(stepsize) # generate value for later request
+    tank.step(stepsize)
+    tap.step(stepsize)
+    print "   - Tap="+str(tap.state)+" Tank="+str(tank.charge)
+    if tap.state == 0: done = True
+  print "   - Done\n"
+
+
+tests = [battery1lamp,
+         battery3lamps,
+         panelbatterylamp,
+         panelbattery3lamps,
+         multiplexer,
+         source,
+         generator,
+         taptank,
+         mains,
+         raintanktap,
+        ]
+print "Running self-test:\n"
+for i in range(len(tests)):
+  test = tests[i]
+  test(i)
+
