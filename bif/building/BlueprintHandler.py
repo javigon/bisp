@@ -25,7 +25,7 @@ class BlueprintHandler:
             # Fetch any outstanding events from the engine process and execute in simulator
             while not self.local_queue.empty():
                 action = self.local_queue.get()
-                self.blueprint.set(action[0], action[1])
+                self.blueprint.interface.set(action[0], action[1])
                 print 'Received action:', action
             
             points = self.blueprint.interface.get_getters()
