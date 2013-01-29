@@ -21,12 +21,19 @@ from building import BlueprintBuilder, BlueprintHandler, Blueprint
 from multiprocessing.queues import Queue
 from multiprocessing.process import Process
 import time
-
+from datetime import datetime
 
 def _Manager__init_simulator(building, queue):
     try:
         blueprint = Blueprint.BluePrint(yearlimit=20, building=building)
-        blueprint.construct()
+        
+        def getstarttime():
+          now = datetime.now()
+          origin = datetime(now.year, 1, 1, 0,0,0)
+          td = now - origin
+          return td.total_seconds()
+        starttime = getstarttime()
+        blueprint.construct(starttime)
         
         bh = BlueprintHandler.BlueprintHandler(blueprint, True)
         bh.start(queue)
@@ -91,3 +98,4 @@ class _Manager(object):
     
 # Initialize the manager
 Manager = _Manager()
+

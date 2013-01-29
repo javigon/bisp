@@ -21,12 +21,12 @@ class BluePrint():
         print "adj:"
         for i in range(len(self.adj)): print " " + str(self.adj[i][0]) + " <-> " + str(self.adj[i][1])
 
-    def construct (self):
+    def construct (self, starttime=0.0):
         DAYS_PER_YEAR = 365
         TEMPARATURE_OUTSIDE = 27
         TEMPARATURE_INSIDE = 21
 
-        self.time = 0.0
+        self.time = starttime
         self.interface = interface = SimInterface()
 
         # lists
