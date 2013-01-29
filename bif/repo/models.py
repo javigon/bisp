@@ -19,10 +19,12 @@ class Entity(models.Model):
 
 class Measurement(models.Model):
     bid = models.IntegerField("Unique building ID")
-    uuid = models.CharField(max_length=256) #models.ForeignKey(Entity);
-    timestamp = models.DateTimeField("Current time the value was recorded")
+    uuid = models.CharField(max_length=256, db_index=True) #models.ForeignKey(Entity);
+    timestamp = models.DateTimeField("Current time the value was recorded", db_index=True)
     val = models.FloatField("Value to be stored")
-    
+    index_together = [
+                      ["uuid", "timestamp"],
+                    ]
     def __unicode__(self):
         return str(self.id)
 

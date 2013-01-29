@@ -20,12 +20,17 @@ from building.impl.room import Room
 class BuildingDataResource(ModelResource):
     class Meta:
         resource_name = 'buildinginfo'
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
         queryset = Building.objects.all()
         
 class MeasurementsResource(ModelResource):
     class Meta:
         resource_name = 'measurement'
         queryset = Measurement.objects.all()
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
+        ordering = { 'timestamp' }
         filtering = {
             'bid': ALL,
             'timestamp': ALL,
