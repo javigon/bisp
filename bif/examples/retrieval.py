@@ -69,7 +69,7 @@ def get_service_value(service_id):
      advance queries. 
     '''
     # We use the following
-    light_url = SERVER_ADDRESS + 'measurement/?uuid=' + str(service_id) + '&limit=2'
+    light_url = SERVER_ADDRESS + 'measurement/?uuid=' + str(service_id) + '&limit=2&order_by=-timestamp'
     js_object = read_url(light_url)
     
     # Retrieve the last 20 samples of the light.
