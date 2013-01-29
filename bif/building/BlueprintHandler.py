@@ -25,8 +25,11 @@ class BlueprintHandler:
             # Fetch any outstanding events from the engine process and execute in simulator
             while not self.local_queue.empty():
                 action = self.local_queue.get()
-                self.blueprint.interface.set(action[0], action[1])
-                print 'Received action:', action
+                try:
+                    self.blueprint.interface.set(action[0], float(action[1]))
+                    print 'Received action:', action
+                except exceptions.ValueError:
+                    print "Value '"+str(action[1])+"' is not convertable to float"
             
             points = self.blueprint.interface.get_getters()
     
