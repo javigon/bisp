@@ -38,7 +38,7 @@
 \title{Building Information Service Platform\\\scalebox{0.85}{a Discrete Event Simulator for Building Modeling}}
 \author{Aslak Johansen \url{aslj@itu.dk}\\Matias Bjørling \url{mabj@itu.dk}\\Javier González González \url{jgon@itu.dk}}
 \logo{
-  \scalebox{1.0}{\includeBitmap{ITU_logo_bart_SH.jpg}{10mm}}
+%  \scalebox{1.0}{\includeBitmap{ITU_logo_bart_SH.jpg}{10mm}}
 }
 \date{February 5, 2013}
 
@@ -54,8 +54,14 @@
   \frametitle{Context}
   
   \begin{itemize}
-    \item 
+    \item Climate change is a real problem
+    \item We need to lower our carbon footprint in order to limit the damage
+    \item Goals have been set for decreasing the use of fossil fuels
+    \item Buildings make up a significant part of the consumption so this is a good place to start
+    \item The first step in acting is knowing
   \end{itemize}
+  
+  Energy Futures: \url{http://energyfutures.itu.dk}
   
 \end{frame}
 
@@ -65,8 +71,38 @@
   \frametitle{Problem}
   
   \begin{itemize}
-    \item 
+    \item Testing on a real building has implications
+      \begin{itemize}
+        \item A bug in the developed logic can bring down the building
+        \item People get mad when you bring down the building
+      \end{itemize}
+    \item Alternative: Use a simulator
+    \item Testing on a simulator has implications
+      \begin{itemize}
+        \item The modeled world is an approximation
+        \item Results may not be transferable
+      \end{itemize}
   \end{itemize}
+  
+  \begin{itemize}
+    \item We can't provide access to a building
+    \item We can provide access to a simulator
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Simulation
+\begin{frame}
+  \frametitle{Simulation}
+  
+  \vspace{1.0cm}
+  \begin{center}
+    \begin{tabular}{ccc}
+      \scalebox{0.65}{\includeSVG{buildinglogic}} & \hspace{0mm} & \scalebox{0.65}{\includeSVG{simulatorlogic}} \\
+      Deployment & & Simulation
+    \end{tabular}
+  \end{center}
   
 \end{frame}
 
@@ -75,8 +111,19 @@
 \begin{frame}
   \frametitle{Approach}
   
+  \vspace{-8mm}\begin{center}
+    \scalebox{0.27}{\includeSVG{layers}}
+  \end{center}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Layers
+\begin{frame}
+  \frametitle{Layers}
+  
   \begin{itemize}
-    \item 
+    \descitem{sdfdas}
   \end{itemize}
   
 \end{frame}
@@ -85,6 +132,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Interface
 \begin{frame}
   \frametitle{Interface}
+  
+  \begin{itemize}
+    \item 
+  \end{itemize}
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Example
+\begin{frame}
+  \frametitle{Example}
   
   \begin{itemize}
     \item 
