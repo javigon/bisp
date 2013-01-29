@@ -8,6 +8,7 @@ from numpy.distutils import environment
 from django.utils.datetime_safe import datetime
 from django.utils.timezone import utc
 from repo.models import Measurement
+import exceptions
 
 class BlueprintHandler:
     setter_blacklist = []
