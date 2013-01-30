@@ -14,10 +14,10 @@ BISP provides a framework for working services it in a building. It acts as a re
 Requirements
 ------------
 
-django: web framework
-django-tastypie: web service interface
-networkx: python graph library
-APScheduler: scheduling library http://packages.debian.org/sid/python-apscheduler
+* django: web framework
+* django-tastypie: web service interface
+* networkx: python graph library
+* APScheduler: scheduling library http://packages.debian.org/sid/python-apscheduler
 
 Installation
 ------------
@@ -80,20 +80,16 @@ Before you can really use BISP, an builing must be instantiated. To use the dumm
 Source code structure
 ---------------------
 
-/doc/                Documentation
-/doc/manual.*        Manual
-/doc/sketches/       Ideas
-/doc/vocabulary.txt  List of terms
-/bif/                Source code
-/bif/sim/            Code for simulation
-/bif/webconf/        Django settings to connect the building model and sensor data repository
-  Dependencies:
-        Python: Django 1.4+
-        Python: Django-tastypie
-        Database: MySQL (or any other. A new database backend is easy to add)
-/bif/building/       Building model and simulation instantiation
-/bif/examples/       Various examples on how to use the BISP framework
-/bif/userapi         Django app for exporting the building and sensor repository data
-/bif/repo            Django data definition for building and repository data.
+* /doc/                Documentation
+* /doc/manual.*        Manual
+* /doc/sketches/       Ideas
+* /doc/vocabulary.txt  List of terms
+* /bif/                Source code
+* /bif/sim/            Code for simulation
+* /bif/webconf/        Django settings to connect the building model and sensor data repository
+* /bif/building/       Building model and simulation instantiation
+* /bif/examples/       Various examples on how to use the BISP framework
+* /bif/userapi         Django app for exporting the building and sensor repository data
+* /bif/repo            Django data definition for building and repository data.
 
 
