@@ -302,8 +302,8 @@ At the thermal layer the building is modeled as a room adjacency graph. Nodes re
 Light is simulated at a per-room basis. It is calculated as
 \begin{eqnarray}
   \nonumber L =
-            \sum_{i=0}^{\mathrm{room}} \mathbf{lamps}[i] +
-            \sum_{j=0}^{\mathrm{room}}
+            \sum\limits_{i=0}^{\mathrm{room}} \mathbf{lamps}[i] +
+            \sum\limits_{j=0}^{\mathrm{room}}
             \left(
               \mathbf{has\_blinds}[j] ~?~ \mathbf{blinds}[j] : 1
             \right) \cdot \mathbf{windows}[j] \cdot \mathbf{cloud} \cdot \mathbf{sun}
