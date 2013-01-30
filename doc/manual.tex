@@ -331,13 +331,10 @@ We won't go into details regarding the low-level interface. There is a demo of a
   \label{fig:demo}
 \end{figure}
 
-\subsection{High-level Interface}
+\subsection{Architecture}
 
-%TODO: Matias: Please describe the restfull interface here.
-
-To be filled out
-
-Needs to reference figure \ref{fig:interface:mediumlevel}
+The building simulator is developed using Python. The architecture of the building is depicted in
+figure \ref{fig:interface:mediumlevel}. It consist of three parts:
 
 \begin{figure}[htb]
   \begin{center}
@@ -347,24 +344,68 @@ Needs to reference figure \ref{fig:interface:mediumlevel}
   \label{fig:interface:mediumlevel}
 \end{figure}
 
-\subsubsection{Requirements}
+\begin{enumerate}
+				\descitem{Model} An internal representation of the building is maintained. This is
+				an 1-1 mapping of the exported information available for you to work with.
+				\descitem{Simulator} Uses the model to generate simulation of the services and
+				actuators available in the building simulator.
+				\descitem{Web interface} Provides a restless interface for querying the building
+				simulator. It is this interface that you mainly should interact with when developing
+				your product.
+\end{enumerate}
 
-%TODO: Matias: Which packages and DBMS are needed?
+The model binds the two parts, simulator and web interface, together. The model defines what they
+each must simulate and export. The simulation store all its information in a mysql database, that
+the web interface then access for measurements. 
 
-To be filled out
-\begin{itemize}
-  \descitem{django} (the D is silent)
-  \descitem{tastypie}
-  \descitem{networkx}
-  \descitem{apscheduler}
-  \descitem{mysql} For storing time-series data of the simulations.
-\end{itemize}
+\subsection{Web interface}
 
-\subsubsection{Installation}
+The web interface are accessed through a RESTless interface. There are four types of queries available for the simulator:
 
-%TODO: Matias: How should it be set up?
+\begin{enumerate}
+				\descitem{Simulated buildings} Outputs information about the available buildings in
+				the simulator.
+				\descitem{The physical building plan} Outputs information about a single building.
+				This extracts information about all the floor, rooms, their services, etc. 
+				\descitem{Access a service sensor value} For each of the services listed in the
+				physical plan, an ID is associated. This can be used to retrieve measurements from a
+				given services. The supported sensors on each service is marked in the nested
+				"Outputs".
+				\descitem{Set a service sensor value} Similar to accessing the value, the sensors
+				that support input is defined in the "Inputs" part under the service description.
+\end{enumerate}
 
-To be filled out
+First, The building information is the generic information that the is available for a building, and let us
+instantiate the simulator code with the right parameters. You use it mainly to retrieve the bid
+needed for further queries.
+
+Second, The physical building plan is the index over all services. It output all the information necessary
+to retrieve measurements for each service and also set values for each..
+
+Finally, measurements is accessed through the last two items. The full service ID, plus the
+output/input parameter appended as "-inputvar". If storing the information, make sure to read the
+definition of the parameters and the input it takes.
+
+Please look at https://github.com/javigon/bisp/blob/master/bif/examples/retrieval.py for an example
+of querying.
+
+Also, the building simulator is using the django-tastypie framework to formulate it queries. Use the
+manual at http://django-tastypie.readthedocs.org/en/latest/ to formulate more advance queries.
+
+By using the tastypie framework. You may get the output in json or xml format. Just append
+?format=xml to your query if you wish to have it in XML.
+
+\subsubsection{Query strings}
+We assume that you have setup the building simulator, and append http://localhost:8080/ or what your
+current server is before the query strings.
+
+\begin{enumerate}
+				\descitem{/api/user/buildinginfo} Retrieve all the building info
+				\descitem{/api/user/building/entry/description/bid} Retrieve all information about a
+				building and its services.
+				\descitem{/api/user/measurement} Query the available measurements.
+				\descitem{/api/user/building/set/bid/sensorid/value} Set a sensor's input parameter.
+\end{enumerate}
 
 \subsubsection{Example Building}
 
