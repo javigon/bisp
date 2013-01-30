@@ -57,7 +57,7 @@
     \item Climate change is a real problem
     \item We need to lower our carbon footprint in order to limit the damage
     \item Goals have been set for decreasing the use of fossil fuels
-    \item Buildings make up a significant part of the consumption so this is a good place to start
+    \item Buildings make up a significant part of the consumption so they are a good place to start
     \item The first step in acting is knowing
   \end{itemize}
   
@@ -153,7 +153,8 @@
     \item Simulation type: Successive over-relaxation
       \begin{itemize}
         \item Energy is transferred through walls
-        \item Rooms affect their neighbors directly, and through them the whole building
+        \item Rooms affect their neighbors directly
+        \item Rooms affect the rest of the building indirectly
       \end{itemize}
   \end{itemize}
   
@@ -166,11 +167,11 @@
   
   It's really very simple:
   \begin{center}
-  \scalebox{0.7}{
+  \scalebox{0.8}{
   $
   L =
-      \sum_{i=0}^{\mathrm{room}} \mathbf{lamps}[i] +
-      \sum_{j=0}^{\mathrm{room}}
+      \sum\limits_{i=0}^{\mathrm{room}} \mathbf{lamps}[i] +
+      \sum\limits_{j=0}^{\mathrm{room}}
       \left(
         \mathbf{has\_blinds}[j] ~?~ \mathbf{blinds}[j] : 1
       \right) \cdot \mathbf{windows}[j] \cdot \mathbf{cloud} \cdot \mathbf{sun}$
