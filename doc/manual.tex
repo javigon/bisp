@@ -224,6 +224,21 @@ The sun is modeled as a double sine. The one sine has a yearly period with minim
 
 Clouds a modeled as random patterns with added noise. This is subtracted from the sun in order to get temperature and light. This affects temperature and solar panel production.
 
+The current model results in abrupt transitions at some midnights. This is a result of the modeling choices made in the implementation. There are two relevant data structures:
+\begin{itemize}
+  \descitem{map} a list of per-day values, constructed by successively increasing the values of entries within a random distance to a uniformly random index.
+  \descitem{daymap} a list of per-second values, constructed in the same way as \textdesc{map}. This list is generated at on-demand at the first lookup of a value in a new day.
+\end{itemize}
+The lookup procedure splits the time parameter of the request up into a day index and a subday index, and then calculates the cloud cover as:
+\begin{eqnarray}
+\nonumber C = \mathbf{map}[day] \cdot 10+\mathbf{daymap}[subday]+\mathbf{random}
+\end{eqnarray}
+While it is reasonable to assume that both \textdesc{map} and \textdesc{daymap} are relatively smooth two properties of this approach can cause abrupt transitions:
+\begin{enumerate}
+  \item The difference of two neighboring entries in \textdesc{map} are multiplied by 10.
+  \item Two neighboring generations of \textdesc{daymap} do not align by design.
+\end{enumerate}
+
 \subsubsection{Rain Model}
 \label{sec:internals:models:rain}
 
