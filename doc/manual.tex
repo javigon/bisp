@@ -12,7 +12,7 @@
 \usepackage{fancybox}
 \usepackage[table]{xcolor}
 \usepackage[T1]{fontenc}
-%\usepackage{caption}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{url}
@@ -424,7 +424,7 @@ current server is before the query strings.
 
 \subsubsection{Example Building}
 
-We provide an example building. Figure \ref{fig:building:example} illustrates the layout. There are three types of rooms:
+We provide an example building. The code can be found at bisp/bif/building/dummy/buildingCreator.py. This architectural model is instantiated by dumy.py and used as a layout for our building simulator. Figure \ref{fig:building:example} illustrates the layout. There are three types of rooms:
 \begin{enumerate}
   \descitem{Hallways} Have no windows but 5 lamps, 2 heaters and 2 air-conditioners. Rooms 6, 13 and 20 are hallways.
   \descitem{Bathrooms} Have no windows but 2 lamps and 1 water tap\footnote{The water tap is not implemented. Instead there is a building-granularity consumption model.}. Rooms 5, 12 and 19 are bathrooms.
@@ -439,15 +439,19 @@ We provide an example building. Figure \ref{fig:building:example} illustrates th
   \label{fig:building:example}
 \end{figure}
 
-\subsubsection{Adding Buildings}
+\subsubsection{Adding and modifying buildings}
 
 %TODO: Javier: How does one add buildings?
+The building layout can be modified, and more buildings can be added to the simulation too. It is bisp/bif/building/bmanager.py that handles the building physical layouts, instantiate them and connect them to the simulator.
 
-To be filled out
+The only requirement for a new building layout to be added to the simulation is that it is compliant with the building interface we have defined. It can be found in the form of an abstract class at bisp/bif/building/bif.py. This interface defines the information a building must expose. However, each building can provide whichever services are required (e.g.  lightning, water, heating, etc) without any limit or restriction. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+As mentioned before, we provide an example building. It is located at bisp/bif/building. The physical layout of the building can be found at bisp/bif/building/dummy/buildingCreator.py. This building physical model is exposed by bisp/bif/building/dummy/dummy.py, which is the building interface implementing the abstract interface bif.py. It is actually dummy.py that is used by the building manager (bmanager.py) in order to query and actuate the building itself.
+
+It is worth mentioning that whichever it is the building physical representation implementing the building interface (bif.py) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
+
+Even when it might sound like an intricate way of mapping services to buildings and ultimately to a simulation, the design is very simple. (ADD FIGURE). Besides, this design is flexible enough as to allow changing and adding building layouts and instances without worrying about the simulator running on top of it.
+
 
 \section{Lessons Learned}
 \label{sec:lessons}
