@@ -1,3 +1,10 @@
+'''
+Enum for python
+
+Created on Dec 8, 2013
+
+@author: Javier Gonzalez
+'''
 class Enum:
     ''' Class to create an enumerated type
         

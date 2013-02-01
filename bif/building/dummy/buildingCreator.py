@@ -5,6 +5,7 @@ Created on Jan 23, 2013
 
 @author: Javier Gonzalez
 '''
+
 from building.impl import room
 from building.impl import lamp
 from building.impl import blinder

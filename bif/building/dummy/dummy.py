@@ -1,3 +1,10 @@
+'''
+Building Dummy Implementation
+
+Created on Jan 23, 2013
+
+@author: Javier Gonzalez
+'''
 from building.impl import building
 import buildingCreator
 from building import bif

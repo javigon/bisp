@@ -2,8 +2,10 @@
 Test Class for dummyDB
 
 '''
+from sys import *
 
-from building.dummy import dummy
+path.append("..")
+from dummy import dummy
 import unittest
 
 class TestBif(unittest.TestCase):
