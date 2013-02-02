@@ -450,7 +450,14 @@ As mentioned before, we provide an example building. It is located at bisp/bif/b
 
 It is worth mentioning that whichever it is the building physical representation implementing the building interface (bif.py) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
 
-Even when it might sound like an intricate way of mapping services to buildings and ultimately to a simulation, the design is very simple. (ADD FIGURE). Besides, this design is flexible enough as to allow changing and adding building layouts and instances without worrying about the simulator running on top of it.
+Even when it might sound like an intricate way of mapping services to buildings and ultimately to a simulation, the design is very simple. (Figure~\ref{fig:interface:mediumlevel}). Besides, this design is flexible enough as to allow changing and adding building layouts and instances without worrying about the simulator running on top of it. The steps to do so are:
+
+\begin{enumerate}
+\item{Create a new building physical model following the bisp/bif/building/dummy/buildingCreator.py schema.}
+\item{Create a new building interface that implements bisp/bif/building/bif.py. If the building representation is the same as we provide as example, just by using bif/building/dummy/dummy.py as a guideline is enough.}
+\item{Instantiate the new building in bisp/bif/building/bmanager.py using a unique ID to identify the building}
+\item{Use the web interface to see, query or actuate the building, either by using a browser or a programming language of choice against the RestLess interface.}
+\end{enumerate}
 
 
 \section{Lessons Learned}
