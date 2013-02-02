@@ -92,4 +92,4 @@ Source code structure
 * /bif/userapi         Django app for exporting the building and sensor repository data
 * /bif/repo            Django data definition for building and repository data.
 
-
+* Please note that both the documentation and the presentation regarding the building simulator are written in LaTex. Since we only provide the .tex file, it is necessary to compile the documentin order to get a .pdf. The Makefile file provided can be used for this purpose (type make). It is also possible to use a LaTex compiler of choice (Mac users)
