@@ -521,6 +521,7 @@ The topic of dependency resolution during calculation is not currently solved. T
 
 The right solution\textsuperscript{\textregistered} is to do calculations as a resolver moves through a dependency graph. This graph should span every piece of logic in the simulator code: objects, models and layer connections. This approach keeps the complexity down as the model grows.
 
+The \textsl{other} right solution\textsuperscript{\textregistered} is to relax the requirement and accept that the model provides eventual consistency only. In this case we could employ a Signal/Collect pattern\footnote{Like this: \url{https://fosdem.org/2013/schedule/event/signal_collect/}.} to keep things simple.
 
 \subsection{Occupancy Modeling}
 \label{lessons:occupancy}
