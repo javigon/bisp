@@ -442,21 +442,21 @@ We provide an example building. The code can be found at bisp/bif/building/dummy
 \subsubsection{Adding and modifying buildings}
 
 %TODO: Javier: How does one add buildings?
-The building layout can be modified, and more buildings can be added to the simulation too. It is bisp/bif/building/bmanager.py that handles the building physical layouts, instantiate them and connect them to the simulator.
+The building layout can be modified, and more buildings can be added to the simulation too. It is \texttt{bif/building/bmanager.py} that handles the building physical layouts, instantiate them and connect them to the simulator.
 
-The only requirement for a new building layout to be added to the simulation is that it is compliant with the building interface we have defined. It can be found in the form of an abstract class at bisp/bif/building/bif.py. This interface defines the information a building must expose. However, each building can provide whichever services are required (e.g.  lightning, water, heating, etc) without any limit or restriction. 
+The only requirement for a new building layout to be added to the simulation is that it is compliant with the building interface we have defined. It can be found in the form of an abstract class at \texttt{bif/building/bif.py}. This interface defines the information a building must expose. However, each building can provide whichever services are required (e.g.  lightning, water, heating, etc) without any limit or restriction. 
 
-As mentioned before, we provide an example building. It is located at bisp/bif/building. The physical layout of the building can be found at bisp/bif/building/dummy/buildingCreator.py. This building physical model is exposed by bisp/bif/building/dummy/dummy.py, which is the building interface implementing the abstract interface bif.py. It is actually dummy.py that is used by the building manager (bmanager.py) in order to query and actuate the building itself.
+As mentioned before, we provide an example building. It is located at \texttt{bif/building}. The physical layout of the building can be found at \texttt{bif/building/dummy/buildingCreator.py}. This building physical model is exposed by \texttt{bif/building/dummy/dummy.py}, which is the building interface implementing the abstract interface \texttt{bif.py}. It is actually \texttt{dummy.py} that is used by the building manager (\texttt{bmanager.py}) in order to query and actuate the building itself.
 
-It is worth mentioning that whichever it is the building physical representation implementing the building interface (bif.py) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
+It is worth mentioning that whichever it is the building physical representation implementing the building interface (\texttt{bif.py}) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
 
 Even when it might sound like an intricate way of mapping services to buildings and ultimately to a simulation, the design is very simple. (Figure~\ref{fig:interface:mediumlevel}). Besides, this design is flexible enough as to allow changing and adding building layouts and instances without worrying about the simulator running on top of it. The steps to do so are:
 
 \begin{enumerate}
-\item{Create a new building physical model following the bisp/bif/building/dummy/buildingCreator.py schema.}
-\item{Create a new building interface that implements bisp/bif/building/bif.py. If the building representation is the same as we provide as example, just by using bif/building/dummy/dummy.py as a guideline is enough.}
-\item{Instantiate the new building in bisp/bif/building/bmanager.py using a unique ID to identify the building}
-\item{Use the web interface to see, query or actuate the building, either by using a browser or a programming language of choice against the RestLess interface.}
+\item Create a new building physical model following the \texttt{bif/building/dummy/buildingCreator.py} schema.
+\item Create a new building interface that implements \texttt{bif/building/bif.py}. If the building representation is the same as we provide as example, just by using \texttt{bif/building/dummy/dummy.py} as a guideline is enough.
+\item Instantiate the new building in \texttt{bif/building/bmanager.py} using a unique ID to identify the building.
+\item Use the web interface to see, query or actuate the building, either by using a browser or a programming language of choice against the RestLess interface.
 \end{enumerate}
 
 
