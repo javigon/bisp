@@ -442,11 +442,11 @@ We provide an example building. The code can be found at bisp/bif/building/dummy
 \subsubsection{Adding and modifying buildings}
 
 %TODO: Javier: How does one add buildings?
-The building layout can be modified, and more buildings can be added to the simulation too. It is \texttt{bif/building/bmanager.py} that handles the building physical layouts, instantiate them and connect them to the simulator.
+The building layout can be modified, and more buildings can be added to the simulation too. It is \texttt{bif/building/bmanager.py} that handles the building physical layouts, instantiate them and connects them to the simulator.
 
 The only requirement for a new building layout to be added to the simulation is that it is compliant with the building interface we have defined. It can be found in the form of an abstract class at \texttt{bif/building/bif.py}. This interface defines the information a building must expose. However, each building can provide whichever services are required (e.g.  lightning, water, heating, etc) without any limit or restriction. 
 
-As mentioned before, we provide an example building. It is located at \texttt{bif/building}. The physical layout of the building can be found at \texttt{bif/building/dummy/buildingCreator.py}. This building physical model is exposed by \texttt{bif/building/dummy/dummy.py}, which is the building interface implementing the abstract interface \texttt{bif.py}. It is actually \texttt{dummy.py} that is used by the building manager (\texttt{bmanager.py}) in order to query and actuate the building itself.
+As mentioned before, we provide an example building. It is located in \texttt{bif/building}. The physical layout of the building can be found at \texttt{bif/building/dummy/buildingCreator.py}. This building physical model is exposed by \texttt{bif/building/dummy/dummy.py}, which is the building interface implementing the abstract interface \texttt{bif.py}. It is actually \texttt{dummy.py} that is used by the building manager (\texttt{bmanager.py}) in order to query and actuate the building itself.
 
 It is worth mentioning that whichever it is the building physical representation implementing the building interface (\texttt{bif.py}) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
 
