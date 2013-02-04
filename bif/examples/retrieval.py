@@ -93,14 +93,22 @@ def set_service_value(service_id, value):
 if __name__ == '__main__':
     
     # Retrieve a list of registered buildings
+    print 'Retrieve all buildings available in the simulator.'
     get_buildings()
+    input()
     
     # Get all information about a specific building
+    print 'Retrieve the blueprint for the building with id:', QUERY_BUILDING_BID
     get_all_building_info(QUERY_BUILDING_BID)
-    
+    input()
+
     # Get information for a specific service (water, ac, light, etc)
+    print 'Get the value for the specific light with id:', TEST_SERVICE_ID
     get_service_value(TEST_SERVICE_ID)
-    
+    input()    
+
     # Set information for a specific service
+    print 'Turn the light off for service:', TEST_SERVICE_ID
     set_service_value(TEST_SERVICE_ID, 0)
+
     pass
