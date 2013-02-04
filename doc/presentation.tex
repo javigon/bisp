@@ -110,7 +110,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Blueprint
 \begin{frame}
-  \frametitle{Blueprint}
+  \frametitle{Dummy Building}
   
   \vspace{-8mm}\begin{center}
     \scalebox{0.43}{\includeSVG{building0}}
@@ -217,53 +217,48 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Interface
 \begin{frame}
-  \frametitle{Interface}
+  \frametitle{How to communicate with the simulator}
   
   \begin{itemize}
-    \item to be filled out by Matias!
-  \end{itemize}
-  
-\end{frame}
+    \item RESTless web interface
+    \item 4 type of queries:
+    \begin{itemize}
+          \item Buildings available
+          \item Building blueprint
+          \item Get a service value
+          \item Set a service value
+    \end{itemize}
+    \item Each service has a unique id (e.g. a specific light)
+    \item You find the service id under the building blueprint
+    \item How to get started? 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Example Time!
-\begin{frame}
-  \frametitle{Example Time!}
+ \end{itemize}
   
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusion
 \begin{frame}
-  \frametitle{Conclusion}
+  \frametitle{More}
   
   \begin{itemize}
-    \item We have a real-time simulator at\\
-            \scalebox{.8}{\url{gsd.itu.dk}}
-    \item You are welcome to do your own installation for
+    \item A live building simulator is located at\\
+            \scalebox{.8}{\url{gsd.itu.dk}} 
+    \item If you wish, you can get the source and run your own building simulator. For example:
       \begin{itemize}
-        \item Simulation independently of other users
-        \item Highly accelerated (life) testing
-        \item Matias!
+        \item Work completely independently of other users
+        \item Run simulation of the building behavior using your own timings (currently the building updates all sensors every 15 seconds)
       \end{itemize}
     \item Links:
     \begin{itemize}
       \item Documentation: \\
             \scalebox{.8}{\url{https://gsd.wikit.itu.dk/GSD2013+Building+Simulator}}
-      \item Code:  \\
+      \item Source code:  \\
             \scalebox{.8}{\url{https://github.com/javigon/bisp/}}
     \end{itemize}
-    \item Let us know how the simulator can be improved!
+    \item Let us know how the simulator can be improved (or send patches)!
   \end{itemize}
   
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Questions
-\begin{frame}
-  \frametitle{Questions}
-  
-\end{frame}
-
 \end{document}
-
