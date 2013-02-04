@@ -19,6 +19,7 @@
 %\usepackage{setspace}
 %\usepackage{float}
 \usepackage{listings}
+%\usepackage{subsections}
 
 \bibliographystyle{plain}
 
@@ -29,7 +30,6 @@
 \setlength{\parskip}{3mm}
 
 % http://www.elec.ucl.ac.be/logistique/informatique/Digests/TeX/1999/texhax.04
-\let\subsubsubsection\paragraph
 \setcounter{secnumdepth}{5}   % depth of section numbering
 \setcounter{tocdepth}{5}      % depth of section showing in TOC
 
@@ -372,9 +372,9 @@ figure \ref{fig:interface:mediumlevel}. It consist of three parts:
 
 The model binds the two parts, simulator and web interface, together. The model defines what they
 each must simulate and export. The simulation store all its information in a mysql database, that
-the web interface then access for measurements. 
+the web interface then access for measurements. The rest of this section deals with the high-level interface.
 
-\subsubsection{Web service}
+\subsection{Web service}
 
 The web interface are accessed through a RESTless interface. There are four types of queries available for the simulator:
 
@@ -402,6 +402,8 @@ Finally, measurements is accessed through the last two items. The full service I
 output/input parameter appended as "-inputvar". If storing the information, make sure to read the
 definition of the parameters and the input it takes.
 
+\subsubsection{Examples}
+
 Please look at https://github.com/javigon/bisp/blob/master/bif/examples/retrieval.py for an example
 of querying.
 
@@ -411,9 +413,9 @@ manual at http://django-tastypie.readthedocs.org/en/latest/ to formulate more ad
 By using the tastypie framework. You may get the output in json or xml format. Just append
 ?format=xml to your query if you wish to have it in XML.
 
-\subsubsubsection{Query strings}
-We assume that you have setup the building simulator, and append http://localhost:8080/ or what your
-current server is before the query strings.
+\subsubsection{Query strings}
+
+We assume that you have setup the building simulator, and prepend http://localhost:8080/ or what your current server is to the query strings.
 
 \begin{enumerate}
 				\descitem{/api/user/buildinginfo} Retrieve all the building info
@@ -423,7 +425,7 @@ current server is before the query strings.
 				\descitem{/api/user/building/set/bid/sensorid/value} Set a sensor's input parameter.
 \end{enumerate}
 
-\subsubsection{Example Building}
+\subsection{Example Building}
 
 We provide an example building. The code can be found at bisp/bif/building/dummy/buildingCreator.py. This architectural model is instantiated by dumy.py and used as a layout for our building simulator. Figure \ref{fig:building:example} illustrates the layout. There are three types of rooms:
 \begin{enumerate}
@@ -440,7 +442,7 @@ We provide an example building. The code can be found at bisp/bif/building/dummy
   \label{fig:building:example}
 \end{figure}
 
-\subsubsection{Building Management}
+\subsection{Building Management}
 
 %TODO: Javier: How does one add buildings?
 The building layout can be modified, and more buildings can be added to the simulation too. It is \texttt{bif/building/bmanager.py} that handles the building physical layouts, instantiate them and connects them to the simulator.
