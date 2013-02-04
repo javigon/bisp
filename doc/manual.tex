@@ -426,6 +426,7 @@ We assume that you have setup the building simulator, and prepend http://localho
 \end{enumerate}
 
 \subsection{Example Building}
+\label{sec:interface:high:examplebuilding}
 
 We provide an example building. The code can be found at bisp/bif/building/dummy/buildingCreator.py. This architectural model is instantiated by dumy.py and used as a layout for our building simulator. Figure \ref{fig:building:example} illustrates the layout. There are three types of rooms:
 \begin{enumerate}
@@ -444,24 +445,33 @@ We provide an example building. The code can be found at bisp/bif/building/dummy
 
 \subsection{Building Management}
 
-%TODO: Javier: How does one add buildings?
-The building layout can be modified, and more buildings can be added to the simulation too. It is \texttt{bif/building/bmanager.py} that handles the building physical layouts, instantiate them and connects them to the simulator.
+% building manager
+Existing building layouts can be modified, and more can be added to the simulator. The building manager component\footnote{Implemented in the \texttt{bmanager} package (\texttt{/bif/building/bmanager.py}).} instantiates the building models according to layouts, associates them to an instance of the simulator and then perform queries and actuations..
 
-The only requirement for a new building layout to be added to the simulation is that it is compliant with the building interface we have defined. It can be found in the form of an abstract class at \texttt{bif/building/bif.py}. This interface defines the information a building must expose. However, each building can provide whichever services are required (e.g.  lightning, water, heating, etc) without any limit or restriction. 
+% building interface: introduction
+Building management is centered around a building interface\footnote{Implemented in the \texttt{bif} abstract class (\texttt{/bif/building/bif.py}).} which disjoints the building model from the simulation model. Modifying the building model only affects the simulation model if the building interface is changed, and the other way around. This means that the addition of a Revit\footnote{Revit is a Autodesk product for building information modeling.}-based building model is unlikely to influence the simulator model at all; that is until we add cross-layer features.
 
-As mentioned before, we provide an example building. It is located in \texttt{bif/building}. The physical layout of the building can be found at \texttt{bif/building/dummy/buildingCreator.py}. This building physical model is exposed by \texttt{bif/building/dummy/dummy.py}, which is the building interface implementing the abstract interface \texttt{bif.py}. It is actually \texttt{dummy.py} that is used by the building manager (\texttt{bmanager.py}) in order to query and actuate the building itself.
+% building interface: requirements
+The only requirement for a new building model is that it complies with the building interface. The building interface is designed in such a way that arbitrary services (e.g.\ lightning, water, heating, etc) can be exposed.
 
-It is worth mentioning that whichever it is the building physical representation implementing the building interface (\texttt{bif.py}) is irrelevant both for the building manager and the simulator itself. This means that a new/better building representation can be used, (e.g. a Revit model), and as long as it respects the bif interface, the simulator will interact with it.
-
-Even when it might sound like an intricate way of mapping services to buildings and ultimately to a simulation, the design is very simple. (Figure~\ref{fig:interface:mediumlevel}). Besides, this design is flexible enough as to allow changing and adding building layouts and instances without worrying about the simulator running on top of it. The steps to do so are:
-
+% sample building
+The implementation of the example building from section \ref{sec:interface:high:examplebuilding} is located within the \texttt{/bif/building/dummy} tree. The two main files are:
 \begin{enumerate}
-\item Create a new building physical model following the \texttt{bif/building/dummy/buildingCreator.py} schema.
-\item Create a new building interface that implements \texttt{bif/building/bif.py}. If the building representation is the same as we provide as example, just by using \texttt{bif/building/dummy/dummy.py} as a guideline is enough.
-\item Instantiate the new building in \texttt{bif/building/bmanager.py} using a unique ID to identify the building.
-\item Use the web interface to see, query or actuate the building, either by using a browser or a programming language of choice against the RestLess interface.
+  \item \texttt{buildingCreator.py} The layout of the building model.
+  \item \texttt{dummy.py} The implementation of the building interface.
 \end{enumerate}
 
+% steps
+The steps to do are:
+\begin{enumerate}
+\item Create a new building model following the \texttt{buildingCreator.py} schema.
+\item Create a new implementation of the building interface. If the building representation is similar to the example above then consider using \texttt{dummy.py} as a guideline.
+\item Instantiate the new building in \texttt{bif/building/bmanager.py} using a unique ID to identify the building.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Lessons Learned}
 \label{sec:lessons}
