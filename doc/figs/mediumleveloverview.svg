@@ -25,7 +25,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="613.67142"
+     inkscape:cx="522.95713"
      inkscape:cy="319.44121"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -63,19 +63,19 @@
      id="layer1"
      transform="translate(0,-308.26769)">
     <g
-       id="g4027">
+       id="g3082">
       <text
          transform="matrix(0,-1,1,0,0,0)"
          sodipodi:linespacing="125%"
          id="text2987-0"
          y="446.4567"
-         x="-701.50262"
+         x="-727.64594"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman10;-inkscape-font-specification:LMRoman10"
          xml:space="preserve"><tspan
            y="446.4567"
-           x="-701.50262"
+           x="-727.64594"
            id="tspan2989-2"
-           sodipodi:role="line">Dummy</tspan></text>
+           sodipodi:role="line">Building Interface</tspan></text>
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
@@ -336,19 +336,19 @@
          style="fill:none;stroke:#000000;stroke-width:0.99921262;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
     </g>
     <g
-       id="g4019">
+       id="g3090">
       <text
          transform="matrix(0,-1,1,0,0,0)"
          sodipodi:linespacing="125%"
          id="text2987"
          y="403.93701"
-         x="-725.48834"
+         x="-727.49225"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman10;-inkscape-font-specification:LMRoman10"
          xml:space="preserve"><tspan
            y="403.93701"
-           x="-725.48834"
+           x="-727.49225"
            id="tspan2989"
-           sodipodi:role="line">BuildingManager</tspan></text>
+           sodipodi:role="line">Building Manager</tspan></text>
       <path
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
