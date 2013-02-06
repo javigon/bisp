@@ -1,13 +1,13 @@
-bisp: Building Information Service Platfrom
+bisp: Building Information Service Platform
 ===========================================
 
 Discrete building simulator.
 
-Introdution
+Introduction
 -----------
-In a time when people are starting to realize the impact of climate change legislation has been introduced in order to limit the use of fossil fuels. A significant amount of the energy used today is spent in buildings. Still, little is known about how buildings are used and the tolerances of the factors influencing the experience of the occupants. With insights into these areas we can make informed decisions about the tradeoffs involved in running a building.
+In a time when people are starting to realize the impact of climate change, legislation has been introduced in order to limit the use of fossil fuels. A significant amount of the energy used today is spent in buildings. Still, little is known about how buildings are used and the tolerances of the factors influencing the experience of the occupants. With insights into these areas we can make informed decisions about the tradeoffs involved in running a building.
 
-Buildings are complex systems with multiple layers of controllable services. Writing code for such a system requires a considerable amount of testing. It is paramount that the software controlling the building not turn off the electricity during normal operation. The same goes for water, ventilation, heating and cooling.
+Buildings are complex systems with multiple layers of controllable services. Writing code for such a system requires a considerable amount of testing. It is paramount that the software controlling the building not turn off the electricity during normal operation. The same goes for water, ventilation, heating or cooling.
 
 BISP provides a framework for working services it in a building. It acts as a repository for sensor data, and it export the measurement and building information using a coherent interface. 
 
