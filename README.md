@@ -18,12 +18,13 @@ Requirements
 * django-tastypie: web service interface
 * networkx: python graph library
 * APScheduler: scheduling library http://packages.debian.org/sid/python-apscheduler
+* MySQL: database management system
 
 Installation
 ------------
 We assume Ubuntu 12.10 LTS and django 1.41.
 
-Make sure you have all dependencies
+Make sure you have all dependencies:
 
 	apt-get install mysql-server python-django python-mysqldb python-networkx python-tastypie python-setuptools git
 
@@ -33,46 +34,46 @@ The package apscheduler is currently not in the ubuntu repository. Install the p
 
 	easy_install apscheduler
 
-Now it is time to fetch the code. You do this by using git and cloning the building simulator repository. Go into the directory you like to simulator to be and execute:
+Now it is time to fetch the code. You do this by using git and cloning the building simulator repository. Go into the directory where you would like to install the simulator and execute:
 
 	git clone https://github.com/javigon/bisp.git
 
 Now we have to setup the database access. Edit the bisp/bif/webconf/settings.py with your favorite editor.
 
-At line 19, you see the line 'PASSWORD': 'password', change it to the password you entered when installing mysql. 
+At line 19, you see the line 'PASSWORD': 'password', change it to the password you entered when installing mysql.
 
-Save and close the file. 
+Save and close the file.
 
-Next we need to create the database. Run
+Next we need to create the database. Run:
 
 	mysql -u root -p
 
 and enter your chosen database password.
 
-Then write
+Then write:
 
 	create database bisp;
 
-and after you may exit the mysql command line again by writing 
+and after you may exit the mysql command line again by writing:
 
 	exit
 
-We are now ready to instantiate the database for bisp. 
+We are now ready to instantiate the database for bisp:
 
 	cd into bisp/bif and write python manage.py syncdb
 
-It will ask you to create a Django user. 
+It will ask you to create a Django user.
 
 	"You just installed Django's auth system, which means you don't have any superusers defined.
 	Would you like to create one now? (yes/no): "
 
 Write yes and create a user.
 
-Now we have everything installed and ready to go. Start the bisp by executing 
+Now we have everything installed and ready to go. Start the bisp by executing:
 
 	python manage.py runserver 127.0.0.1:8000
 
-Before you can really use BISP, an builing must be instantiated. To use the dummy building available in the source. You can either create it by accessing http://localhost:8000/admin/ (and insert a building) or write the following query into mysql:
+Before you can really use BISP, an building must be instantiated. To use the dummy building available in the source. You can either create it by accessing http://localhost:8000/admin/ (and insert a building) or write the following query into mysql:
 
 	INSERT INTO repo_measurement (bid, description, bri, active) values(0, 'Building description', 0,1);
 
@@ -92,4 +93,4 @@ Source code structure
 * /bif/userapi         Django app for exporting the building and sensor repository data
 * /bif/repo            Django data definition for building and repository data.
 
-* Please note that both the documentation and the presentation regarding the building simulator are written in LaTex. Since we only provide the .tex file, it is necessary to compile the documentin order to get a .pdf. The Makefile file provided can be used for this purpose (type make). It is also possible to use a LaTex compiler of choice (Mac users)
+* Please note that both the documentation and the presentation are written in LaTeX. Since we only provide the .tex file, it is necessary to build the documentation order to get a .pdf. The Makefile file provided can be used for this purpose (type make in /doc/). It is also possible to use a LaTeX compiler of choice (Mac users).
