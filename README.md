@@ -75,7 +75,7 @@ Now we have everything installed and ready to go. Start the bisp by executing:
 
 Before you can really use BISP, an building must be instantiated. To use the dummy building available in the source. You can either create it by accessing http://localhost:8000/admin/ (and insert a building) or write the following query into mysql:
 
-	INSERT INTO repo_measurement (bid, description, bri, active) values(0, 'Building description', 0,1);
+	INSERT INTO repo_building (bid, description, bri, active) values(0, 'Building description', 0,1);
 
 
 Source code structure
