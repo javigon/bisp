@@ -78,6 +78,14 @@ Before you can really use BISP, an building must be instantiated. To use the dum
 	INSERT INTO repo_building (bid, description, bri, active) values(0, 'Building description', 0,1);
 
 
+Now the server is ready to start producing measurements. To trigger it, the building must be queried at least once. This can easily be donde by using the example that is provided with the code:
+
+	cd bisp/bif/examples
+	python retrieval.py
+	
+Now the simulator starts "stepping" - that is, producing measurements.
+
+
 Source code structure
 ---------------------
 
