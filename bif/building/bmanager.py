@@ -56,9 +56,9 @@ class _Manager(object):
     
     @classmethod
     def initialize_all(self):
-        print 'wee'
         for b in self.get_available_buildings():
-            self.lookup(b.bid)
+            if b.active:
+                self.lookup(b.bid)
 
     @classmethod
     def lookup(self, buildingID):
