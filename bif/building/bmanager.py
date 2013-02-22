@@ -17,7 +17,7 @@ from webconf.settings import BUILDING_REPRESENTATION_DEBUG, BUILDING_REPRESENTAT
 
 import sys
 import traceback
-from building import BlueprintBuilder, BlueprintHandler, Blueprint
+from building import BlueprintHandler, Blueprint
 from multiprocessing.queues import Queue
 from multiprocessing.process import Process
 import time
@@ -53,6 +53,12 @@ class _Manager(object):
     
     def __call__(self):
         return self
+    
+    @classmethod
+    def initialize_all(self):
+        print 'wee'
+        for b in self.get_available_buildings():
+            self.lookup(b.bid)
 
     @classmethod
     def lookup(self, buildingID):
@@ -98,4 +104,3 @@ class _Manager(object):
     
 # Initialize the manager
 Manager = _Manager()
-
