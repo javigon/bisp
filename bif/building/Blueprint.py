@@ -24,7 +24,6 @@ class BluePrint():
     def construct (self, starttime=0.0):
         DAYS_PER_YEAR = 365
         TEMPARATURE_OUTSIDE = 27
-        TEMPARATURE_INSIDE = 21
 
         self.time = starttime
         self.interface = interface = SimInterface()
@@ -129,6 +128,10 @@ class BluePrint():
         self.outside = TNodeExposed(TEMPARATURE_OUTSIDE, self.nodelist, self.cnoutside, True)
         interface.register_get("environment.temp", self.outside, TNode.get_value)
 
+        # half-iteration to initialize indoor temperature to outdoor temperature
+        self.step()
+        TEMPARATURE_INSIDE = self.outside.get_value()
+
         # room dynamic
         for room in self.building.getRooms():
 
@@ -142,7 +145,6 @@ class BluePrint():
             # lamps
             lightSum = CNodeSum([], len(room.getLights()) + len(room.getBlinders()))
             interface.register_get(str(room.getLogicalID()) + "-light", lightSum, lambda obj: obj.value)
-
             i = 0
             for lamp in room.getLights():
                 i += 1
