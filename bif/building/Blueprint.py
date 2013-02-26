@@ -122,6 +122,7 @@ class BluePrint():
         interface.register_get("energy-battery-3-level", self.battery3, FNodeBattery.get_value)
         interface.register_get("energy-mux-select", self.emux, lambda obj: FNodeMultiplexer.get_value(obj, "sel"))
         interface.register_set("energy-mux-select", self.emux, lambda obj, value: FNodeMultiplexer.set_value(obj, "sel", value))
+        interface.register_get("energy-mux-energy", self.emux, lambda obj: FNodeMultiplexer.get_value(obj, "accepted"))
 
         # environment
         self.world = TWorld(self.nodelist, self.edgelist)
