@@ -8,6 +8,7 @@ from numpy.distutils import environment
 from django.utils.datetime_safe import datetime
 from django.utils.timezone import utc
 from repo.models import Measurement
+import django
 import exceptions
 
 class BlueprintHandler:
@@ -50,6 +51,8 @@ class BlueprintHandler:
                 m.uuid = k
                 m.val = g[k]
                 m.save()
+
+                django.db.connection.close() 
         except:
             #print 'error: ', sys.exc_info()
             print 'trace: ', traceback.print_exc()
