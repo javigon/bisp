@@ -5,13 +5,13 @@
 from math import sin, pi
 
 import sys
-sys.path.append("..")
-from thermo import *
-from fnode import *
-from cnode import *
-from occupancy import *
-from siminterface import *
-from simplot import *
+sys.path.append("../..")
+from sim.thermo import *
+from sim.fnode import *
+from sim.cnode import *
+from sim.occupancy import *
+from sim.siminterface import *
+from sim.simplot import *
 
 TIME_PER_DAY = 3600*24
 TIME_PER_YEAR = TIME_PER_DAY*365
