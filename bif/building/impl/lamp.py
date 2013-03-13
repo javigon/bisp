@@ -33,4 +33,4 @@ class Lamp(service.Service):
 
     def getLogicalID(self):
         #return str('L' + str(self.getLampID()))
-        return 'room-' + str(self.getRoomID()) + '-light-' + str(self.getLampID())
+        return 'light-' + str(self.getRoomID()) + '-' + str(self.getLampID())

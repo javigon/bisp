@@ -145,4 +145,4 @@ class Room():
         return roomDef
 
     def getLogicalID(self):
-        return 'floor-' + str(self.getFloor()) + '-room-' + str(self.roomID) + ''
+        return 'room-' + str(self.getFloor()) + '-' + str(self.roomID) + ''

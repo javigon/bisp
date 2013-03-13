@@ -16,7 +16,6 @@ from building.bif import BifBase
 from building.bmanager import Manager
 from building.impl.room import Room
 
-
 class BuildingDataResource(ModelResource):
     class Meta:
         resource_name = 'buildinginfo'
@@ -114,9 +113,6 @@ class BuildingResource(Resource):
     def obj_get_list(self, request=None, **kwargs):
         filters = {}
 
-        print Manager.get_available_buildings()
-        b = Manager.lookup(1)
-
         if hasattr(request, 'GET'):
             # Grab a mutable copy.
             filters = request.GET.copy()
@@ -143,6 +139,33 @@ class BuildingResource(Resource):
         return path[self.PATH_START_IDX+4]
 
     @classmethod
+    def alter_detail_data_to_serialize(self, request, bundle):
+
+      if bundle.data['query'] != 'description':
+        return bundle
+
+      fml = bundle.data.copy()
+
+      # Change each room-xx-xx instance to room
+      for k, v in fml['value'].items():
+        for k1, v1 in v.items():
+          new_k1 = k1
+          if k1.startswith('room'):
+            new_k1 = 'room'
+
+          fml['value'][k][new_k1] = fml['value'][k].pop(k1)
+
+          # Change it for each service also
+#          for sk, sv in fml['value'][k][new_k1].items():
+#            for sk1, sv1 in fml['value'][k][new_k1][sk].items():
+#              print sv1
+#        print type(v), v, k
+
+      bundle.data = fml
+      return bundle
+
+
+    @classmethod
     def get_building_description(self, path):
         """ format /api/user/building/entry/description/1 where 1 is the building id """
         if len(path) < self.PATH_START_IDX + 2:
@@ -157,16 +180,15 @@ class BuildingResource(Resource):
         floor = dict()
         floor['numFloors'] = b.getNumFloors()
 
+        root = dict()
         rooms = dict()
 
         for r in b.getRooms():
-            print type(r)
-
             assert isinstance(r, Room)
             rooms[str(r.getLogicalID())] = r.getFullRepresentation()
 
-        root = dict()
         root['rooms'] = rooms
+
         return root
 
     @classmethod
