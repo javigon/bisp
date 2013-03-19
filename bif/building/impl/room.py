@@ -110,10 +110,10 @@ class Room():
     def getFullRepresentation(self):
 
         lamps = dict()
-        heater = dict()
-        water = dict()
-        ac = dict()
-        blind = dict()
+        heaters = dict()
+        waters = dict()
+        acs = dict()
+        blinds = dict()
 
         roomDef = self.getInContextRepresentation()
 
@@ -123,24 +123,24 @@ class Room():
         roomDef['lights'] = lamps
 
         for h in self.getHeaters():
-            heater['heater'] = h.getInContextRepresentation()
+			heaters[h.getLogicalID()] = h.getInContextRepresentation()
 
-        roomDef['heaters'] = heater
+        roomDef['heaters'] = heaters
 
         for w in self.getWaterAPs():
-            water['water'] = w.getInContextRepresentation()
+            waters[w.getLogicalID()] = w.getInContextRepresentation()
 
-        roomDef['waters'] = water
+        roomDef['waters'] = waters
 
         for a in self.getAcs():
-            ac['ac'] = a.getInContextRepresentation()
+            acs[a.getLogicalID()] = a.getInContextRepresentation()
 
-        roomDef['acs'] = ac
+        roomDef['acs'] = acs
 
         for b in self.getBlinders():
-            blind['blind'] = b.getInContextRepresentation()
+            blinds[b.getLogicalID()] = b.getInContextRepresentation()
 
-        roomDef['blinds'] = blind
+        roomDef['blinds'] = blinds
 
         return roomDef
 
