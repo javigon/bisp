@@ -1,10 +1,7 @@
-import time
-import sys
 import traceback
 
 from apscheduler.scheduler import Scheduler
 from apscheduler.jobstores.ram_store import RAMJobStore
-from numpy.distutils import environment
 from django.utils.datetime_safe import datetime
 from django.utils.timezone import utc
 from repo.models import Measurement
@@ -43,16 +40,18 @@ class BlueprintHandler:
                     continue
                 g[point] = self.blueprint.interface.get(point)
 
-        
+
+            ms = []
             for k in g.keys():
                 m = Measurement()
                 m.bid = self.blueprint.building.buildingID
                 m.timestamp = datetime.utcnow().replace(tzinfo=utc)
                 m.uuid = k
                 m.val = g[k]
-                m.save()
+                ms.append(m)
 
-                django.db.connection.close() 
+            Measurement.objects.bulk_create(ms)
+            django.db.connection.close()
         except:
             #print 'error: ', sys.exc_info()
             print 'trace: ', traceback.print_exc()
