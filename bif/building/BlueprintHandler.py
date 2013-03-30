@@ -29,6 +29,8 @@ class BlueprintHandler:
                     print 'Received action:', action
                 except exceptions.ValueError:
                     print "Value '"+str(action[1])+"' is not convertable to float"
+                except exceptions.KeyError:
+                    print "Value '"+str(action[0])+"' is not a valid datapoint for writing"
             
             points = self.blueprint.interface.get_getters()
     
