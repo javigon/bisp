@@ -2,6 +2,9 @@
 import os
 import sys
 
+# Test run without Apache:
+# python manage.py runserver localhost:8080
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "webconf.settings")
 
