@@ -1,3 +1,8 @@
+* Fix /bif/simu_main.py
+  =====================
+  
+  Currently this is totally broken.
+
 * Fix imports
   ===========
   
