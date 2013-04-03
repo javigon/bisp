@@ -21,7 +21,7 @@ class BluePrint():
         print "adj:"
         for i in range(len(self.adj)): print " " + str(self.adj[i][0]) + " <-> " + str(self.adj[i][1])
 
-    def construct (self, starttime=0.0):
+    def construct (self, starttime=0.0, dumpkeys=False, dumpkeysfile="/tmp/bisp_keys.txt"):
         DAYS_PER_YEAR = 365
         TEMPARATURE_OUTSIDE = 27
 
@@ -212,6 +212,24 @@ class BluePrint():
         # Tighten up dependencies
         for room in self.building.getRooms():
             TEdge(self.outside, nodeRooms[str(room.getLogicalID())], 0.0002, self.edgelist)
+
+        # dump all valid keys to a file
+        if dumpkeys:
+            lines = []
+            lines.append("Datapoints:\n")
+            datapoints = sorted(interface.get_union())
+            for i in range(len(datapoints)):
+                point = datapoints[i]
+                actions = []
+                if interface.has_getter(point): actions.append("get")
+                else: actions.append("   ")
+                if interface.has_setter(point): actions.append("set")
+                else: actions.append("   ")
+                lines.append(" "+("%4d"%(i+1))+" "+str(point)+(" "*(max(map(lambda e: len(e), datapoints))-len(point)))+" "+(" ".join(actions))+"\n")
+
+            fo = open(dumpkeysfile, "w")
+            fo.writelines(lines)
+            fo.close()
 
     def step (self, stepsize=0.1, stepcount=1):
         for _ in range(stepcount):
