@@ -1,7 +1,5 @@
 # Django settings for engine project.
-import os
-import sys
-
+import threading
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
