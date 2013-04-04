@@ -352,7 +352,7 @@ class FNodeSource (FNode):
       sys.exit(10)
   def set_value (self, key=None, value=None):
     if key==None or key=="state":
-      self.state = value
+      self.state = int(value)
     else:
       print textred("Err: Unknown key '"+key+"' for FNodeSource")
       dumpstack()

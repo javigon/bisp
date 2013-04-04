@@ -21,7 +21,7 @@ class BluePrint():
         print "adj:"
         for i in range(len(self.adj)): print " " + str(self.adj[i][0]) + " <-> " + str(self.adj[i][1])
 
-    def construct (self, starttime=0.0, dumpkeys=False, dumpkeysfile="/tmp/bisp_keys.txt"):
+    def construct (self, starttime=0.0, dumpkeys=True, dumpkeysfile="/tmp/bisp_keys.txt"):
         DAYS_PER_YEAR = 365
         TEMPARATURE_OUTSIDE = 27
 
@@ -92,6 +92,7 @@ class BluePrint():
         self.etank2 = FNodeTank(20, 12)
         self.grid = FNodeMains()
         self.gridmodel = FNodeSourceModel(lambda e: self.grid.set_value("state", e), tlist)
+        self.gridstable = FNodeSource(1)
         self.generator1 = FNodeGenerator(self.etank1, 1.1, 0.5, 0, True, self.generators)
         self.generator2 = FNodeGenerator(self.etank2, 2.1, 0.55, 0, True, self.generators)
         self.panelsource = FNodeSourceDynamic(self.lightscale)
@@ -99,13 +100,13 @@ class BluePrint():
         self.battery1 = FNodeBattery(100, 1, self.generator1, self.buffers)
         self.battery2 = FNodeBattery(100, 2, self.generator2, self.buffers)
         self.battery3 = FNodeBattery(100, 3, self.panel, self.buffers)
-        self.emux = FNodeMultiplexer([self.grid, self.battery1, self.battery2, self.battery3], 0)
+        self.emux = FNodeMultiplexer([self.gridstable, self.battery1, self.battery2, self.battery3, self.grid], 0)
         interface.register_get("energy-fuel-1-level", self.etank1, lambda obj: FNodeTank.get_value(obj, "level"))
         interface.register_get("energy-fuel-1-input", self.etank1, lambda obj: FNodeTank.get_value(obj, "input"))
         interface.register_get("energy-fuel-2-level", self.etank2, lambda obj: FNodeTank.get_value(obj, "level"))
         interface.register_get("energy-fuel-2-input", self.etank2, lambda obj: FNodeTank.get_value(obj, "input"))
         interface.register_get("energy-grid-state", self.grid, lambda obj: FNodeSource.get_value(obj, "state"))
-        interface.register_set("energy-grid-state", self.grid, lambda obj, value: FNodeSource.set_value(obj, "state", value))
+        interface.register_get("energy-gridstable-state", self.gridstable, lambda obj: FNodeSource.get_value(obj, "state"))
         interface.register_get("energy-generator-1-production", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "output"))
         interface.register_get("energy-generator-1-state", self.generator1, lambda obj: FNodeGenerator.get_value(obj, "state"))
         interface.register_set("energy-generator-1-state", self.generator1, lambda obj, value: FNodeGenerator.set_value(obj, "state", value))
