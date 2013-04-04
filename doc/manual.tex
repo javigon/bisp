@@ -253,7 +253,7 @@ The occupancy model is sadly, very limited. It simply provides an occupancy indi
 \subsubsection{Grid Model}
 \label{sec:internals:models:grid}
 
-A grid model is used to simulate the service dropout on the electric grid. It has two parameters; maximum uptime $t_{\mathrm{up, max}}$ and maximum downtime $t_{\mathrm{down, max}}$. A change of state will trigger the scheduling of the next change of state. The delay is a random number between 0 and the relevant maximum time.
+A grid model is used to simulate the service dropout on the electric grid. It has two parameters; maximum uptime $t_{\mathrm{up, max}}$ and maximum downtime $t_{\mathrm{down, max}}$. A change of state will trigger the scheduling of the next change of state. The delay is a random number between 0 and the relevant maximum time. A stable grid is provided as well. Its model is to always be on.
 
 \subsubsection{Mains Model}
 \label{sec:internals:models:mains}
@@ -295,7 +295,7 @@ A simple blackout model has been implemented for the water mains. If the water m
 \subsubsection{Energy Layer}
 
 % basics
-At the energy layer we model the flow and conversion of energy. Figure \ref{fig:energy} shows the default configuration of the energy layer. Electrical energy is distributed through a hub modeled as a multiplexer. Inputs can come from three sources; two generators of different capacity and a solar panel. Each input is buffered using a battery.  The output of the solar panel is dependent of the solar cycle and the cloud cover.
+At the energy layer we model the flow and conversion of energy. Figure \ref{fig:energy} shows the default configuration of the energy layer. Electrical energy is distributed through a hub modeled as a multiplexer. Inputs can come from five sources; stable and unstable grid, two generators of different capacity and a solar panel. Each non-grid input is buffered using a battery. The output of the solar panel is dependent of the solar cycle and the cloud cover.
 
 \begin{figure}[htb]
   \begin{center}
@@ -306,7 +306,7 @@ At the energy layer we model the flow and conversion of energy. Figure \ref{fig:
 \end{figure}
 
 % blackouts
-A simple grid blackout model has been implemented. The functionality of lamps, blinds heaters and air-conditioners is depending on the availability of electrical power.
+A simple grid blackout model has been implemented for the unstable grid. The functionality of lamps, blinds heaters and air-conditioners is depending on the availability of electrical power.
 
 \subsubsection{Thermal Layer}
 
