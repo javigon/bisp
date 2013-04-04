@@ -41,7 +41,7 @@ class BluePrint():
         nodeRooms = dict()
 
         # Set environmental light
-        self.lightscale = CNodeMul(map(lambda e: (e, "b"), lightwindows))  # "environment.light"
+        self.lightscale = CNodeMul()  # "environment.light"
         self.lightscalefactor = CNodeConst([(self.lightscale, "a")], 11.43, self.cnodelist)  # scaling "from" temperature "to" light
         interface.register_get("environment-light", self.lightscale, lambda obj: obj.value)
 
@@ -217,6 +217,7 @@ class BluePrint():
 
        
         # Tighten up dependencies
+        map(lambda e: self.lightscale.add_output(e, "b"), lightwindows) # circular dependency rollouts
         for room in self.building.getRooms():
             TEdge(self.outside, nodeRooms[str(room.getLogicalID())], 0.0002, self.edgelist)
 

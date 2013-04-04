@@ -28,6 +28,9 @@ class CNode:
     self.ofilter = ofilter
   def add_output (self, host, port):
     self.outputs.append((host, port))
+    if self.ofilter == None:
+      self.ofilter = {}
+    self.ofilter[(host,port)] = True
   def remove_output (self, host, port):
     new = []
     for thost, tport in self.outputs:
