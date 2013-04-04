@@ -154,8 +154,6 @@ class BluePrint():
                 initial = 0.0
                 lightLamp = CNodeConst([(lightSum, str(i))], initial, self.cnodelist)
                 nodeLamp =  FNodeLamp(self.emux, wattage, lum, consumers=self.consumers, ocnode=lightLamp) #?
-                
-                interface.register_get(str(lamp.getLogicalID()) + "-lightlamp", lightLamp, lambda obj: obj.value)
 
                 interface.register_get(str(lamp.getLogicalID()) + "-production",  nodeLamp, lambda obj: FNodeLamp.get_value(obj, "output"))
                 interface.register_get(str(lamp.getLogicalID()) + "-state", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "state"))
@@ -177,11 +175,6 @@ class BluePrint():
                 lightwindows.append(nodeLightWindow)
 
                 nodeLightWindowSize = CNodeConst([(nodeLightWindow, "a")], size, self.cnodelist)  # size of window
-                
-                interface.register_get(str(blind.getLogicalID()) + "-nodelightBlind", nodeLightBlind, lambda obj: obj.value)
-                interface.register_get(str(blind.getLogicalID()) + "-nodeLightBlindFactor", nodeLightBlindFactor, lambda obj: obj.value)
-                interface.register_get(str(blind.getLogicalID()) + "-nodeLightWindow", nodeLightWindow, lambda obj: obj.value)
-                interface.register_get(str(blind.getLogicalID()) + "-nodeLightWindowSize", nodeLightWindowSize, lambda obj: obj.value)
 
                 interface.register_get(str(blind.getLogicalID()) + "-setpoint", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "setpoint"))
                 interface.register_get(str(blind.getLogicalID()) + "-value", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "value"))
