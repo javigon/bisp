@@ -70,8 +70,6 @@ class _Manager(object):
             return None
 
         if self.binstances.has_key(buildingID) is False:
-            print "larlar- " +str(buildingID)
-            traceback.print_stack()
             ins = None
             if building.bri == BUILDING_REPRESENTATION_DEBUG:
                 ins = dummy.DummyBif(buildingID)
