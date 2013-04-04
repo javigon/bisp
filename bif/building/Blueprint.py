@@ -154,6 +154,8 @@ class BluePrint():
                 initial = 0.0
                 lightLamp = CNodeConst([(lightSum, str(i))], initial, self.cnodelist)
                 nodeLamp =  FNodeLamp(self.emux, wattage, lum, consumers=self.consumers, ocnode=lightLamp) #?
+                
+                interface.register_get(str(lamp.getLogicalID()) + "-lightlamp", lightLamp, lambda obj: obj.value)
 
                 interface.register_get(str(lamp.getLogicalID()) + "-production",  nodeLamp, lambda obj: FNodeLamp.get_value(obj, "output"))
                 interface.register_get(str(lamp.getLogicalID()) + "-state", nodeLamp, lambda obj: FNodeLamp.get_value(obj, "state"))
@@ -174,7 +176,12 @@ class BluePrint():
                 nodeLightWindow = CNodeMul([(nodeLightBlind, "b")])
                 lightwindows.append(nodeLightWindow)
 
-                CNodeConst([(nodeLightWindow, "a")], size, self.cnodelist)  # size of window
+                nodeLightWindowSize = CNodeConst([(nodeLightWindow, "a")], size, self.cnodelist)  # size of window
+                
+                interface.register_get(str(blind.getLogicalID()) + "-nodelightBlind", nodeLightBlind, lambda obj: obj.value)
+                interface.register_get(str(blind.getLogicalID()) + "-nodeLightBlindFactor", nodeLightBlindFactor, lambda obj: obj.value)
+                interface.register_get(str(blind.getLogicalID()) + "-nodeLightWindow", nodeLightWindow, lambda obj: obj.value)
+                interface.register_get(str(blind.getLogicalID()) + "-nodeLightWindowSize", nodeLightWindowSize, lambda obj: obj.value)
 
                 interface.register_get(str(blind.getLogicalID()) + "-setpoint", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "setpoint"))
                 interface.register_get(str(blind.getLogicalID()) + "-value", nodeBlind, lambda obj: FNodeBlinds.get_value(obj, "value"))
@@ -242,63 +249,3 @@ class BluePrint():
             self.consumers.step(stepsize)
             self.time += stepsize
 
-#
-#if __name__ == '__main__':
-#    building = BluePrint()
-#
-#    floorcount = 3
-#    for i in range(floorcount):
-#        # rooms on current floor
-#        r0 = building.addRoom(i, 0)
-#        r1 = building.addRoom(i, 0)
-#        r2 = building.addRoom(i, 0)
-#        r3 = building.addRoom(i, 0)
-#        r4 = building.addRoom(i, 0)
-#        r5 = building.addRoom(i, 0)
-#
-#        for room in [r0, r1, r2, r3, r4, r5]:
-#            building.addLamp(room, 0, 60.0, 500, 0.5)
-#            building.addHeater(room, 0, 3000.0, 0.5, 0.0)
-#            building.addAc(room, 0, 4000.0, 0.4, 0.0)
-#            building.addBlinds(room, 0, 0.5, 0.5, 2.4, 0.1)
-#
-#        # floorstride
-#        if i == 0: roomcount = r5 + 1
-#
-#        # edges on current floor
-#        building.addEdge(r0, r1)
-#        building.addEdge(r0, r5)
-#        building.addEdge(r1, r5)
-#        building.addEdge(r1, r2)
-#        building.addEdge(r2, r5)
-#        building.addEdge(r2, r3)
-#        building.addEdge(r3, r5)
-#        building.addEdge(r3, r4)
-#        building.addEdge(r4, r5)
-#
-#        # edges to floor below
-#        if i != 0:
-#            building.addEdge(r0, r0 - roomcount)
-#            building.addEdge(r1, r1 - roomcount)
-#            building.addEdge(r2, r2 - roomcount)
-#            building.addEdge(r3, r3 - roomcount)
-#            building.addEdge(r4, r4 - roomcount)
-#            building.addEdge(r5, r5 - roomcount)
-#
-#
-#    building.prettyprint()
-#    building.construct()
-#
-#    print "Datapoints:"
-#    datapoints = sorted(building.interface.get_union())
-#    for i in range(len(datapoints)):
-#        point = datapoints[i]
-#        actions = []
-#        if building.interface.has_getter(point): actions.append(textblue("get"))
-#        else: actions.append("   ")
-#        if building.interface.has_setter(point): actions.append(textblue("set"))
-#        else: actions.append("   ")
-#        print " " + ("%3d" % (i + 1)) + " " + str(point) + (" "*(max(map(lambda e: len(e), datapoints)) - len(point))) + " " + (" ".join(actions))
-#    print ""
-#
-#    building.step(stepcount=600)
