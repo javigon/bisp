@@ -5,7 +5,7 @@ import httplib
 bids = range(10)
 host = "http://gsd.itu.dk"
 
-def download (url=host+"/api/user/measurement/?bid=0&uuid=floor-0-room-2-light&limit=1&order_by=-timestamp&format=json"):
+def download (url):
   if url[:7]=="http://": url=url[7:]
   s = len(url.split("/")[0])
   c = httplib.HTTPConnection(url[:s])
