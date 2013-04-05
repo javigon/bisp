@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+
+from subprocess import Popen, PIPE
+import os
+
+def system (command):
+  p = Popen(command, shell=True, stdout=PIPE, close_fds=True)
+  return p.stdout.readlines()
+
+def writefile (filename, contents):
+  fo = open(filename, 'w')
+  fo.writelines(contents)
+  fo.close()
+
+# read
+lines = system("crontab -l")
+
+# modify
+python = system("which python")[0].strip()
+script = os.getcwd()+"/bisp-autostarter"
+line = "*/5 * *  *  * "+python+" "+script+" > /dev/null\n"
+lines.append(line)
+
+# locate tempfile
+filename = "/tmp/delme"
+while os.path.exists(filename): filename += "-"
+
+# write
+writefile(filename, lines)
+system("crontab "+filename)
+
+# cleanup
+os.unlink(filename)
+
