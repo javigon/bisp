@@ -3,8 +3,9 @@
 import httplib
 
 bids = range(10)
+host = "http://gsd.itu.dk"
 
-def download (url="http://gsd.itu.dk/api/user/measurement/?bid=0&uuid=floor-0-room-2-light&limit=1&order_by=-timestamp&format=json"):
+def download (url=host+"/api/user/measurement/?bid=0&uuid=floor-0-room-2-light&limit=1&order_by=-timestamp&format=json"):
   if url[:7]=="http://": url=url[7:]
   s = len(url.split("/")[0])
   c = httplib.HTTPConnection(url[:s])
@@ -15,9 +16,9 @@ def download (url="http://gsd.itu.dk/api/user/measurement/?bid=0&uuid=floor-0-ro
   return d
 
 for bid in bids:
-  response = download("http://gsd.itu.dk/api/user/measurement/?bid="+str(bid)+"&uuid=energy-grid-state&limit=1&order_by=-timestamp&format=json")
+  response = download(host+"/api/user/measurement/?bid="+str(bid)+"&uuid=energy-grid-state&limit=1&order_by=-timestamp&format=json")
   print "bid "+str(bid)+": "+str(len(response))+" chars"
   if response == "{\"meta\": {\"limit\": 1, \"next\": null, \"offset\": 0, \"previous\": null, \"total_count\": 0}, \"objects\": []}":
-    download("http://gsd.itu.dk/api/user/building/entry/set/"+str(bid)+"/energy-mux-select/0/?format=json")
+    download(host+"/api/user/building/entry/set/"+str(bid)+"/energy-mux-select/0/?format=json")
   
 
