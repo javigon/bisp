@@ -17,7 +17,7 @@ def download (url=host+"/api/user/measurement/?bid=0&uuid=floor-0-room-2-light&l
 
 for bid in bids:
   response = download(host+"/api/user/measurement/?bid="+str(bid)+"&uuid=energy-grid-state&limit=1&order_by=-timestamp&format=json")
-  print "bid "+str(bid)+": "+str(len(response))+" chars"
+  print "bid "+str(bid)+"/"+str(len(bids))
   if response == "{\"meta\": {\"limit\": 1, \"next\": null, \"offset\": 0, \"previous\": null, \"total_count\": 0}, \"objects\": []}":
     download(host+"/api/user/building/entry/set/"+str(bid)+"/energy-mux-select/0/?format=json")
   
