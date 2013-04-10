@@ -22,7 +22,9 @@ Requirements
 
 Installation
 ------------
-We assume Ubuntu 12.10 LTS and django 1.41.
+We assume Ubuntu 12.10 LTS and django 1.41. If you are on windows then try this:
+
+	http://itu.dk/~scas/Tutorial.html
 
 Make sure you have all dependencies:
 
