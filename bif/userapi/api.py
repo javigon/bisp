@@ -15,7 +15,7 @@ from tastypie.constants import ALL
 from building.bif import BifBase
 from building.bmanager import Manager
 from building.impl.room import Room
-
+from django.conf.urls.defaults import *
 
 class BuildingDataResource(ModelResource):
     class Meta:
@@ -51,6 +51,11 @@ class BuildingResource(Resource):
         resource_name = 'building'
         object_class = BifBase
 
+    def override_urls(self):
+        return [
+                url(r"^(?P<resource_name>%s)/entry/set/(?P<buildingid>\d+)/(?P<serviceid>[\w\d_-]+)/(?P<value>[-+]?\d*\.\d+|\d+)/$" % self._meta.resource_name, self.wrap_view('set_service'), name="api_set_service"),
+        ]
+
     @classmethod
     def get_fields(cls, f=None, e=None):
         """
@@ -82,7 +87,6 @@ class BuildingResource(Resource):
         """
         This method is called when using the /api/user/building/entry/query/... interface
         """
-
         data = BuildingValue()
         path = None
         methodtype = None
@@ -169,11 +173,11 @@ class BuildingResource(Resource):
         root['rooms'] = rooms
         return root
 
-    @classmethod
-    def set_service(self, path):
+    def set_service(self, request, **kwargs):
         ''' format /api/user/building/entry/set/buildingid/service_id/value where service_id is the 
             service id and value is the value that you wish to set for the actuator/service.'''
-        
+        path = request.path.split('/')
+        print path
         if len(path) < self.PATH_START_IDX + 4:
             raise BadRequest("To set building services. You must supply a service id and its new value. Ex. /api/user/building/entry/set/buildingid/serviceid/0.")
 
@@ -183,11 +187,11 @@ class BuildingResource(Resource):
 
         # Instantiate building if its not already done so
         Manager.lookup(buildingID) 
-        
+
         Manager.set_building_service(buildingID, serviceID, value)
 
         r = dict()
         r['returnvalue'] = True
-        return r
+        return self.create_response(request, r)
 
 
